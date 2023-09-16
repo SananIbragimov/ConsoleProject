@@ -35,13 +35,13 @@ namespace MarketManagement.Helpers
                 switch (selectedOption)
                 {
                     case 1:
-                        
+                        MenuService.MenuAddProduct();
                         break;
                     case 2:
-                        
+
                         break;
                     case 3:
-                        
+
                         break;
                     case 4:
 
@@ -91,13 +91,13 @@ namespace MarketManagement.Helpers
                 switch (selectedOption)
                 {
                     case 1:
-                        
+
                         break;
                     case 2:
-                        
+
                         break;
                     case 3:
-                        
+
                         break;
                     case 4:
 

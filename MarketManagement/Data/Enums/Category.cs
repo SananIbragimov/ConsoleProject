@@ -8,8 +8,8 @@ namespace MarketManagement.Data.Enums
 {
     public enum Category
     {
-        Drink = 1,
-        Meal,
-        Milk
+        drink = 1,
+        meat,
+        milk
     }
 }

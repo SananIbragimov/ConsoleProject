@@ -19,22 +19,36 @@ namespace MarketManagement.Services.Concrete
             if (string.IsNullOrWhiteSpace(name))
                 throw new Exception("Fullname can't be empty!");
 
-            if (category.ToString() != Enum.GetNames(typeof(Category)).ToString())
+            if (!Enum.IsDefined(typeof(Category), category) && category.ToString() != Enum.GetNames(typeof(Category)).ToString())
                 throw new Exception("Category isn't exist");
 
             if (price <= 0)
                 throw new Exception("Price can't be less than 0!");
 
-            var product = new Product
+            if (quantity <= 0)
+                throw new Exception("Quantity can't be less than 0!");
+
+            var existingProduct = _products.FirstOrDefault(x => x.Name == name && x.Category == category);
+            if (existingProduct != null)
             {
-                Name = name,
-                Category = category,
-                Price = price,
-                Quantity = quantity
-            };
-            _products.Add(product);
-            
-            return product.Id;
+                existingProduct.Price += price * quantity;
+                existingProduct.Quantity += quantity;
+                return existingProduct.Id;
+            }
+            else
+            {
+                var product = new Product
+                {
+                    Name = name,
+                    Category = category,
+                    Price = price * quantity,
+                    Quantity = quantity
+                };
+                _products.Add(product);
+
+                return product.Id;
+            }
+
 
         }
 

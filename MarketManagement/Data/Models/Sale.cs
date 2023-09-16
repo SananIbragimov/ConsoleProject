@@ -7,16 +7,17 @@ using System.Threading.Tasks;
 
 namespace MarketManagement.Data.Models
 {
-    public class SellItem : BaseModel
+    public class Sale : BaseModel
     {
         private static int id = 1;
-        public SellItem()
+        public Sale()
         {
             Id = id;
             id++;
         }
 
-        public Product Product { get; set; }
-        public int Quantity { get; set; }
+        public decimal Price { get; set; }
+        public List<SaleItem> SaleItems { get; set; }
+        public DateTime DateTime { get; set; }
     }
 }
