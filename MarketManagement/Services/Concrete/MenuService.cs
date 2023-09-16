@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MarketManagement.Services.Concrete
 {
-    internal class MenuService
+    public class MenuService
     {
     }
 }
