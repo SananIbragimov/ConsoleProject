@@ -44,7 +44,7 @@ namespace MarketManagement.Helpers
 
                         break;
                     case 4:
-
+                        MenuService.MenuShowProducts();
                         break;
                     case 5:
 

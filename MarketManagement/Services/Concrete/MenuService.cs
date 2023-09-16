@@ -1,4 +1,5 @@
-﻿using MarketManagement.Data.Enums;
+﻿using ConsoleTables;
+using MarketManagement.Data.Enums;
 using MarketManagement.Services.Abstract;
 using System;
 using System.Collections.Generic;
@@ -16,10 +17,10 @@ namespace MarketManagement.Services.Concrete
             try
             {
                 Console.WriteLine("Enter Product name:");
-                string name = Console.ReadLine()!;
+                string name = Console.ReadLine()!.ToLower();
 
                 Console.WriteLine("Enter Category name:");
-                Category category = Enum.Parse<Category>(Console.ReadLine()!);
+                Category category = Enum.Parse<Category>(Console.ReadLine()!.ToLower());
 
                 Console.WriteLine("Enter Product Price:");
                 decimal price = decimal.Parse(Console.ReadLine()!);
@@ -34,6 +35,18 @@ namespace MarketManagement.Services.Concrete
             {
                 Console.WriteLine(ex.Message);
             }
+        }
+        public static void MenuShowProducts()
+        {
+            var productList = marketService.GetProducts();
+            var table = new ConsoleTable("ID", "Name", "Category", "Price", "Quantity");
+
+            foreach (var product in productList)
+            {
+                table.AddRow(product.Id, product.Name, product.Category, product.Price, product.Quantity);
+            }
+
+            table.Write();
         }
     }
 }

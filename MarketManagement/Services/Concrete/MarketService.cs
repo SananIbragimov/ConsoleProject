@@ -31,7 +31,7 @@ namespace MarketManagement.Services.Concrete
             var existingProduct = _products.FirstOrDefault(x => x.Name == name && x.Category == category);
             if (existingProduct != null)
             {
-                existingProduct.Price += price * quantity;
+                existingProduct.Price = price;
                 existingProduct.Quantity += quantity;
                 return existingProduct.Id;
             }
@@ -41,7 +41,7 @@ namespace MarketManagement.Services.Concrete
                 {
                     Name = name,
                     Category = category,
-                    Price = price * quantity,
+                    Price = price,
                     Quantity = quantity
                 };
                 _products.Add(product);
@@ -59,7 +59,7 @@ namespace MarketManagement.Services.Concrete
 
         public List<Product> GetProducts()
         {
-            throw new NotImplementedException();
+            return _products;
         }
 
         public List<Product> SearchProductByName(string text)
