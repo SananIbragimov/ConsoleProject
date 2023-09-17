@@ -94,12 +94,16 @@ namespace MarketManagement.Services.Concrete
             return _products;
         }
 
-        public List<Product> SearchProductByName(string text)
+        public List<Product> ShowProductByCategory(Category category)
         {
-            throw new NotImplementedException();
+            if (!Enum.IsDefined(typeof(Category), category))
+                throw new Exception("Category isn't exist");
+
+            var productListByCategory = _products.Where(x=>x.Category == category).ToList();
+            return productListByCategory;
         }
 
-        public List<Product> ShowProductByCategory(Category category)
+        public List<Product> SearchProductByName(string text)
         {
             throw new NotImplementedException();
         }

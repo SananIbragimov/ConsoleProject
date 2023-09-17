@@ -100,5 +100,35 @@ namespace MarketManagement.Services.Concrete
 
             table.Write();
         }
+
+        public static void MenuShowProductByCategory()
+        {
+            try
+            {
+                Console.WriteLine("Category list:");
+                foreach (var value in Enum.GetValues(typeof(Category)))
+                {
+                    Console.WriteLine(value);
+                }
+
+                Console.WriteLine("Choose the category:");
+                Category category = Enum.Parse<Category>(Console.ReadLine()!.ToLower());
+
+
+                var productListByCategory = marketService.ShowProductByCategory(category);
+
+                var table = new ConsoleTable("ID", "Name", "Category", "Price", "Quantity");
+                foreach (var product in productListByCategory)
+                {
+                    table.AddRow(product.Id, product.Name, product.Category, product.Price, product.Quantity);
+                }
+
+                table.Write();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
     }
 }
