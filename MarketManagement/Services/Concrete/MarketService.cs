@@ -20,7 +20,7 @@ namespace MarketManagement.Services.Concrete
             if (string.IsNullOrWhiteSpace(name))
                 throw new Exception("Fullname can't be empty!");
 
-            if (!Enum.IsDefined(typeof(Category), category) && category.ToString() != Enum.GetNames(typeof(Category)).ToString())
+            if (!Enum.IsDefined(typeof(Category), category))
                 throw new Exception("Category isn't exist");
 
             if (price <= 0)
@@ -55,10 +55,13 @@ namespace MarketManagement.Services.Concrete
 
         public int UpdateProduct(int id, string name, Category category, decimal price, int quantity)
         {
-            var existingProduct = _products.FirstOrDefault(x=>x.Id == id);
+            if (id <= 0)
+                throw new Exception("Id can't be less than 0!");
+
+            var existingProduct = _products.FirstOrDefault(x => x.Id == id);
             if (existingProduct == null)
                 throw new Exception($"Product with Id: {id} not found");
-            
+
             existingProduct.Name = name;
             existingProduct.Category = category;
             existingProduct.Price = price;
@@ -67,9 +70,23 @@ namespace MarketManagement.Services.Concrete
             return existingProduct.Id;
         }
 
-        public int DeleteProduct(int id)
+        public bool DeleteProduct(int id)
         {
-            throw new NotImplementedException();
+            if (id <= 0)
+                throw new Exception("Id can't be less than 0!");
+
+            var deleteProduct = _products.FirstOrDefault(x => x.Id == id);
+            if (deleteProduct == null)
+                throw new Exception("Product not found");
+
+            Console.WriteLine($"Are you sure you want to delete product '{deleteProduct.Name}'? (yes/no):");
+            string confirm = Console.ReadLine()!.Trim().ToLower();
+            if (confirm == "yes")
+            {
+                _products.Remove(deleteProduct);
+                return true;
+            }
+            return false;
         }
 
         public List<Product> GetProducts()

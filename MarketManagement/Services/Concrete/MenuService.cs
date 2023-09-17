@@ -65,6 +65,29 @@ namespace MarketManagement.Services.Concrete
             }
         }
 
+        public static void MenuDeleteProduct()
+        {
+            try
+            {
+                Console.WriteLine("Enter the id of the product you want to delete:");
+                int id = int.Parse(Console.ReadLine()!);
+
+                var deleteID = marketService.DeleteProduct(id);
+                if (deleteID)
+                {
+                    Console.WriteLine("Product deleted");
+                }
+                else
+                {
+                    Console.WriteLine("Product not deleted");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
         public static void MenuShowProducts()
         {
             var productList = marketService.GetProducts();

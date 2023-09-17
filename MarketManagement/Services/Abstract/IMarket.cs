@@ -12,7 +12,7 @@ namespace MarketManagement.Services.Abstract
     {
         public int AddProduct(string name, Category category, decimal price, int quantity);
         public int UpdateProduct(int id, string name, Category category, decimal price, int quantity);
-        public int DeleteProduct(int id);
+        public bool DeleteProduct(int id);
         public List<Product> GetProducts();
         public List<Product> ShowProductByCategory(Category category);
         public List<Product> ShowProductByRangePrice(decimal min, decimal max);
