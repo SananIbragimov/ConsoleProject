@@ -47,10 +47,10 @@ namespace MarketManagement.Helpers
                         MenuService.MenuShowProducts();
                         break;
                     case 5:
-                        MenuService.MenuShowProductByCategory();
+                        MenuService.MenuShowProductsByCategory();
                         break;
                     case 6:
-
+                        MenuService.MenuShowProductsByPriceRange();
                         break;
                     case 7:
 

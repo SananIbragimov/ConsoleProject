@@ -101,7 +101,7 @@ namespace MarketManagement.Services.Concrete
             table.Write();
         }
 
-        public static void MenuShowProductByCategory()
+        public static void MenuShowProductsByCategory()
         {
             try
             {
@@ -115,7 +115,7 @@ namespace MarketManagement.Services.Concrete
                 Category category = Enum.Parse<Category>(Console.ReadLine()!.ToLower());
 
 
-                var productListByCategory = marketService.ShowProductByCategory(category);
+                var productListByCategory = marketService.ShowProductsByCategory(category);
 
                 var table = new ConsoleTable("ID", "Name", "Category", "Price", "Quantity");
                 foreach (var product in productListByCategory)
@@ -129,6 +129,26 @@ namespace MarketManagement.Services.Concrete
             {
                 Console.WriteLine(ex.Message);
             }
+        }
+
+        public static void MenuShowProductsByPriceRange()
+        {
+            Console.WriteLine("Enter minimum price");
+            decimal min = decimal.Parse(Console.ReadLine()!);
+
+            Console.WriteLine("Enter maximum price");
+            decimal max = decimal.Parse(Console.ReadLine()!);
+
+            var productListByPrice = marketService.ShowProductsByRangePrice(min, max);
+
+            var table = new ConsoleTable("ID", "Name", "Category", "Price", "Quantity");
+            foreach (var product in productListByPrice)
+            {
+                table.AddRow(product.Id, product.Name, product.Category, product.Price, product.Quantity);
+            }
+
+            table.Write();
+
         }
     }
 }

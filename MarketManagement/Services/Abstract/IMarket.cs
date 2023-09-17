@@ -14,8 +14,8 @@ namespace MarketManagement.Services.Abstract
         public int UpdateProduct(int id, string name, Category category, decimal price, int quantity);
         public bool DeleteProduct(int id);
         public List<Product> GetProducts();
-        public List<Product> ShowProductByCategory(Category category);
-        public List<Product> ShowProductByRangePrice(decimal min, decimal max);
+        public List<Product> ShowProductsByCategory(Category category);
+        public List<Product> ShowProductsByRangePrice(decimal min, decimal max);
         public List<Product> SearchProductByName(string text);
 
     }

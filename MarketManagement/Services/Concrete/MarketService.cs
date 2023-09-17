@@ -94,7 +94,7 @@ namespace MarketManagement.Services.Concrete
             return _products;
         }
 
-        public List<Product> ShowProductByCategory(Category category)
+        public List<Product> ShowProductsByCategory(Category category)
         {
             if (!Enum.IsDefined(typeof(Category), category))
                 throw new Exception("Category isn't exist");
@@ -103,12 +103,17 @@ namespace MarketManagement.Services.Concrete
             return productListByCategory;
         }
 
-        public List<Product> SearchProductByName(string text)
+
+        public List<Product> ShowProductsByRangePrice(decimal min, decimal max)
         {
-            throw new NotImplementedException();
+            if (min <= 0 && max <= 0)
+                throw new Exception("Values can't be less than 0!");
+
+            var productListByPrice = _products.Where(x=>x.Price <= max &&  x.Price >= min).ToList();
+            return productListByPrice;
         }
 
-        public List<Product> ShowProductByRangePrice(decimal min, decimal max)
+        public List<Product> SearchProductByName(string text)
         {
             throw new NotImplementedException();
         }
