@@ -14,6 +14,7 @@ namespace MarketManagement.Services.Concrete
     {
         private List<Product> _products = new();
 
+
         public int AddProduct(string name, Category category, decimal price, int quantity)
         {
             if (string.IsNullOrWhiteSpace(name))
@@ -52,6 +53,20 @@ namespace MarketManagement.Services.Concrete
 
         }
 
+        public int UpdateProduct(int id, string name, Category category, decimal price, int quantity)
+        {
+            var existingProduct = _products.FirstOrDefault(x=>x.Id == id);
+            if (existingProduct == null)
+                throw new Exception($"Product with Id: {id} not found");
+            
+            existingProduct.Name = name;
+            existingProduct.Category = category;
+            existingProduct.Price = price;
+            existingProduct.Quantity = quantity;
+
+            return existingProduct.Id;
+        }
+
         public int DeleteProduct(int id)
         {
             throw new NotImplementedException();
@@ -77,9 +92,5 @@ namespace MarketManagement.Services.Concrete
             throw new NotImplementedException();
         }
 
-        public int UpdateProduct(int id)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

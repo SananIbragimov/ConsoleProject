@@ -38,7 +38,7 @@ namespace MarketManagement.Helpers
                         MenuService.MenuAddProduct();
                         break;
                     case 2:
-
+                        MenuService.MenuUpdateProduct();
                         break;
                     case 3:
 

@@ -11,7 +11,7 @@ namespace MarketManagement.Services.Abstract
     public interface IMarket
     {
         public int AddProduct(string name, Category category, decimal price, int quantity);
-        public int UpdateProduct(int id);
+        public int UpdateProduct(int id, string name, Category category, decimal price, int quantity);
         public int DeleteProduct(int id);
         public List<Product> GetProducts();
         public List<Product> ShowProductByCategory(Category category);

@@ -36,6 +36,35 @@ namespace MarketManagement.Services.Concrete
                 Console.WriteLine(ex.Message);
             }
         }
+
+        public static void MenuUpdateProduct()
+        {
+            try
+            {
+                Console.WriteLine("Enter Product ID:");
+                int id = int.Parse(Console.ReadLine()!);
+
+                Console.WriteLine("Enter Product name:");
+                string name = Console.ReadLine()!.ToLower();
+
+                Console.WriteLine("Enter Category name:");
+                Category category = Enum.Parse<Category>(Console.ReadLine()!.ToLower());
+
+                Console.WriteLine("Enter Product Price:");
+                decimal price = decimal.Parse(Console.ReadLine()!);
+
+                Console.WriteLine("Enter Product Quantity:");
+                int quantity = int.Parse(Console.ReadLine()!);
+
+                int updateID = marketService.UpdateProduct(id, name, category, price, quantity);
+                Console.WriteLine($"Product with ID:{updateID} was updated!");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
         public static void MenuShowProducts()
         {
             var productList = marketService.GetProducts();
