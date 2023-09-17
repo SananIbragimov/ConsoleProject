@@ -150,5 +150,21 @@ namespace MarketManagement.Services.Concrete
             table.Write();
 
         }
+
+        public static void MenuSearchProductsByName()
+        {
+            Console.WriteLine("Enter the search word");
+            string text = Console.ReadLine()!;
+
+            var productListByName = marketService.SearchProductsByName(text);
+
+            var table = new ConsoleTable("ID", "Name", "Category", "Price", "Quantity");
+            foreach (var product in productListByName)
+            {
+                table.AddRow(product.Id, product.Name, product.Category, product.Price, product.Quantity);
+            }
+
+            table.Write();
+        }
     }
 }

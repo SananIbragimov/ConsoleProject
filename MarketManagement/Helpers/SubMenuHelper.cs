@@ -53,7 +53,7 @@ namespace MarketManagement.Helpers
                         MenuService.MenuShowProductsByPriceRange();
                         break;
                     case 7:
-
+                        MenuService.MenuSearchProductsByName();
                         break;
                     case 0:
                         break;

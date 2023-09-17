@@ -7,6 +7,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace MarketManagement.Services.Concrete
 {
@@ -113,9 +114,13 @@ namespace MarketManagement.Services.Concrete
             return productListByPrice;
         }
 
-        public List<Product> SearchProductByName(string text)
+        public List<Product> SearchProductsByName(string text)
         {
-            throw new NotImplementedException();
+            if(String.IsNullOrWhiteSpace(text))
+                throw new Exception("Text can't be empty!");
+
+            var productListByName = _products.Where(x=>x.Name.Contains(text)).ToList();
+            return productListByName;
         }
 
     }

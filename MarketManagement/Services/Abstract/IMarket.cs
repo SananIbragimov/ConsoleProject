@@ -16,7 +16,7 @@ namespace MarketManagement.Services.Abstract
         public List<Product> GetProducts();
         public List<Product> ShowProductsByCategory(Category category);
         public List<Product> ShowProductsByRangePrice(decimal min, decimal max);
-        public List<Product> SearchProductByName(string text);
+        public List<Product> SearchProductsByName(string text);
 
     }
 }
