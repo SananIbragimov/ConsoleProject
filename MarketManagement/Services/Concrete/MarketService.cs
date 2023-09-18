@@ -14,7 +14,7 @@ namespace MarketManagement.Services.Concrete
     public class MarketService : IMarket
     {
         private List<Product> _products = new();
-
+        private List<Sale> _sales = new();
 
         public int AddProduct(string name, Category category, decimal price, int quantity)
         {
@@ -123,5 +123,46 @@ namespace MarketManagement.Services.Concrete
             return productListByName;
         }
 
+        public int AddSale(int id, List<SaleItem> saleItems, DateTime dateTime, int quantity)
+        {
+            if (id <= 0)
+                throw new Exception("Quantity can't be less than 0!");
+
+            if (saleItems == null || !saleItems.Any())
+                throw new Exception("There are no sale items");
+
+            if (quantity <= 0)
+                throw new Exception("Quantity can't be less than 0!");
+
+            decimal totalPrice = 0;
+            foreach(var saleItem in saleItems)
+            {
+                saleItem.Product.Id = id;
+                var product = _products.FirstOrDefault(x=>x.Id == saleItem.Product.Id);
+                if (product is null)
+                    throw new Exception($"Product with ID {saleItem.Product.Id} not found.");
+
+                if (product.Quantity < saleItem.Quantity)
+                    throw new Exception("Not enough quantity available for sale");
+
+                product.Quantity -= saleItem.Quantity;
+                totalPrice += product.Price * saleItem.Quantity;
+            }
+
+            var sale = new Sale
+            {
+                
+                Price = totalPrice,
+                DateTime = dateTime,
+                SaleItems = saleItems
+            };
+            _sales.Add(sale);
+            return sale.SaleItems.Count;
+        }
+
+        public List<Sale> GetSales()
+        {
+            return _sales;
+        }
     }
 }

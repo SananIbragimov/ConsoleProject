@@ -1,8 +1,10 @@
 ﻿using ConsoleTables;
 using MarketManagement.Data.Enums;
+using MarketManagement.Data.Models;
 using MarketManagement.Services.Abstract;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +14,8 @@ namespace MarketManagement.Services.Concrete
     public class MenuService
     {
         private static IMarket marketService = new MarketService();
+
+        // MenuService static methods for products
         public static void MenuAddProduct()
         {
             try
@@ -105,11 +109,13 @@ namespace MarketManagement.Services.Concrete
         {
             try
             {
-                Console.WriteLine("Category list:");
+                var enumTable = new ConsoleTable("Category list:");
+                
                 foreach (var value in Enum.GetValues(typeof(Category)))
                 {
-                    Console.WriteLine(value);
+                    enumTable.AddRow(value);
                 }
+                enumTable.Write();
 
                 Console.WriteLine("Choose the category:");
                 Category category = Enum.Parse<Category>(Console.ReadLine()!.ToLower());
@@ -162,6 +168,50 @@ namespace MarketManagement.Services.Concrete
             foreach (var product in productListByName)
             {
                 table.AddRow(product.Id, product.Name, product.Category, product.Price, product.Quantity);
+            }
+
+            table.Write();
+        }
+
+        // MenuService static methods for sales
+        public static void MenuAddSale()
+        {
+            try
+            {
+                Console.WriteLine("Enter product Id");
+                int id = int.Parse(Console.ReadLine()!);
+
+                Console.WriteLine("Enter Product quantity");
+                int quantity = int.Parse(Console.ReadLine()!);
+
+                Console.WriteLine("Enter datetime");
+                var dateTime = DateTime.ParseExact(Console.ReadLine()!, "dd.MM.yyyy HH:mm:ss", null);
+
+                List<SaleItem> saleItems = new();
+                var saleItem = new SaleItem
+                {
+                    Quantity = quantity,
+                };
+
+                saleItems.Add(saleItem);
+
+                var saleCount = marketService.AddSale(id, saleItems, dateTime,quantity);
+                Console.WriteLine($"Sale count: {saleCount}");
+            }catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        public static void MenuGetSales()
+        {
+            var saleList = marketService.GetSales();
+            var table = new ConsoleTable("ID", "Name", "Quantity", "Price");
+
+            foreach (var sale in saleList)
+            {
+                foreach(var item in sale.SaleItems)
+                table.AddRow(sale.Id, item.Product.Name, item.Quantity, sale.Price);
             }
 
             table.Write();

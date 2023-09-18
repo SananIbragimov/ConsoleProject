@@ -91,7 +91,7 @@ namespace MarketManagement.Helpers
                 switch (selectedOption)
                 {
                     case 1:
-
+                        MenuService.MenuAddSale();
                         break;
                     case 2:
 
@@ -100,7 +100,7 @@ namespace MarketManagement.Helpers
 
                         break;
                     case 4:
-
+                        MenuService.MenuGetSales();
                         break;
                     case 5:
 

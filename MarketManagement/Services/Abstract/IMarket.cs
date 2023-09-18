@@ -10,6 +10,7 @@ namespace MarketManagement.Services.Abstract
 {
     public interface IMarket
     {
+        // Methods for products
         public int AddProduct(string name, Category category, decimal price, int quantity);
         public int UpdateProduct(int id, string name, Category category, decimal price, int quantity);
         public bool DeleteProduct(int id);
@@ -17,6 +18,10 @@ namespace MarketManagement.Services.Abstract
         public List<Product> ShowProductsByCategory(Category category);
         public List<Product> ShowProductsByRangePrice(decimal min, decimal max);
         public List<Product> SearchProductsByName(string text);
+
+        // Methods for sales
+        public int AddSale(int id, List<SaleItem> saleItems, DateTime dateTime, int quantity);
+        public List<Sale> GetSales();
 
     }
 }
