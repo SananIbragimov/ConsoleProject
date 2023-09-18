@@ -20,7 +20,7 @@ namespace MarketManagement.Services.Abstract
         public List<Product> SearchProductsByName(string text);
 
         // Methods for sales
-        public int AddSale(int id, List<SaleItem> saleItems, DateTime dateTime, int quantity);
+        public int AddSale(List<SaleItem> saleItems, DateTime dateTime);
         public List<Sale> GetSales();
 
     }

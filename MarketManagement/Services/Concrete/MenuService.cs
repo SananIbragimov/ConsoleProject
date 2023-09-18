@@ -110,7 +110,7 @@ namespace MarketManagement.Services.Concrete
             try
             {
                 var enumTable = new ConsoleTable("Category list:");
-                
+
                 foreach (var value in Enum.GetValues(typeof(Category)))
                 {
                     enumTable.AddRow(value);
@@ -178,26 +178,33 @@ namespace MarketManagement.Services.Concrete
         {
             try
             {
-                Console.WriteLine("Enter product Id");
-                int id = int.Parse(Console.ReadLine()!);
 
-                Console.WriteLine("Enter Product quantity");
-                int quantity = int.Parse(Console.ReadLine()!);
+                Console.WriteLine("Enter count of sale items");
+                int itemCount = int.Parse(Console.ReadLine()!);
+
+                var saleItems = new List<SaleItem>();
+                for (int i = 1; i <= itemCount; i++)
+                {
+                    Console.WriteLine($"Enter product Id for item {i}");
+                    int id = int.Parse(Console.ReadLine()!);
+
+                    Console.WriteLine($"Enter Product quantity for product {id}");
+                    int quantity = int.Parse(Console.ReadLine()!);
+
+                    saleItems.Add(new SaleItem()
+                    {
+                        ProductId = id,
+                        Quantity = quantity
+                    }); ;
+                }
 
                 Console.WriteLine("Enter datetime");
                 var dateTime = DateTime.ParseExact(Console.ReadLine()!, "dd.MM.yyyy HH:mm:ss", null);
 
-                List<SaleItem> saleItems = new();
-                var saleItem = new SaleItem
-                {
-                    Quantity = quantity,
-                };
-
-                saleItems.Add(saleItem);
-
-                var saleCount = marketService.AddSale(id, saleItems, dateTime,quantity);
+                var saleCount = marketService.AddSale(saleItems, dateTime);
                 Console.WriteLine($"Sale count: {saleCount}");
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
@@ -206,12 +213,12 @@ namespace MarketManagement.Services.Concrete
         public static void MenuGetSales()
         {
             var saleList = marketService.GetSales();
-            var table = new ConsoleTable("ID", "Name", "Quantity", "Price");
+            var table = new ConsoleTable("Sale Id", "ProductId", "SaleId", "Quantity", "Total Price");
 
             foreach (var sale in saleList)
             {
-                foreach(var item in sale.SaleItems)
-                table.AddRow(sale.Id, item.Product.Name, item.Quantity, sale.Price);
+                foreach (var item in sale.SaleItems)
+                    table.AddRow(sale.Id, item.ProductId, item.SaleId, item.Quantity, item.TotalPrice);
             }
 
             table.Write();
