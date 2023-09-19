@@ -22,6 +22,7 @@ namespace MarketManagement.Services.Abstract
         // Methods for sales
         public int AddSale(List<SaleItem> saleItems, DateTime dateTime);
         public List<Sale> GetSales();
+        public int WithdrawalProductFromSale(int saleId, int productId);
 
     }
 }

@@ -201,8 +201,8 @@ namespace MarketManagement.Services.Concrete
                 Console.WriteLine("Enter datetime");
                 var dateTime = DateTime.ParseExact(Console.ReadLine()!, "dd.MM.yyyy HH:mm:ss", null);
 
-                var saleCount = marketService.AddSale(saleItems, dateTime);
-                Console.WriteLine($"Sale count: {saleCount}");
+                var saleItemsCount = marketService.AddSale(saleItems, dateTime);
+                Console.WriteLine($"SaleItems count: {saleItemsCount}");
             }
             catch (Exception ex)
             {
@@ -222,6 +222,18 @@ namespace MarketManagement.Services.Concrete
             }
 
             table.Write();
+        }
+
+        public static void MenuWithdrawalProductFromSale()
+        {
+            Console.WriteLine("Enter SaleId: ");
+            int saleId = int.Parse(Console.ReadLine()!);
+
+            Console.WriteLine("Enter ProductId: ");
+            int productId = int.Parse(Console.ReadLine()!);
+
+            var withdrawProduct = marketService.WithdrawalProductFromSale(saleId, productId);
+            Console.WriteLine($"Withdraw the Product with ProductId={withdrawProduct}");
         }
     }
 }

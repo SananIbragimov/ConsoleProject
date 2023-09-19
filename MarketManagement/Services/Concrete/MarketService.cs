@@ -177,5 +177,28 @@ namespace MarketManagement.Services.Concrete
         {
             return _sales;
         }
+
+        public int WithdrawalProductFromSale(int saleId, int productId)
+        {
+            if (saleId <= 0) 
+                throw new Exception("saleId can't be less than 0!");
+
+            if (productId <= 0)
+                throw new Exception("productId can't be less than 0!");
+
+            var sale = _sales.FirstOrDefault(x=>x.Id == saleId);
+            if (sale == null)
+                throw new Exception($"Sale with Id {saleId} not found!");
+
+            var saleItem = sale.SaleItems.FirstOrDefault(x=>x.ProductId == productId);
+            if (saleItem == null)
+                throw new Exception($"SaleItem with Id {productId} not found!");
+
+            var product = _products.FirstOrDefault(x=>x.Id == saleItem.ProductId);
+            product!.Quantity += saleItem.Quantity;
+            sale.SaleItems.Remove(saleItem);
+
+            return productId;
+        }
     }
 }
