@@ -178,13 +178,16 @@ namespace MarketManagement.Services.Concrete
             return _sales;
         }
 
-        public int WithdrawalProductFromSale(int saleId, int productId)
+        public int WithdrawalProductFromSale(int saleId, int productId, int count)
         {
             if (saleId <= 0) 
                 throw new Exception("saleId can't be less than 0!");
 
             if (productId <= 0)
                 throw new Exception("productId can't be less than 0!");
+
+            if (count <= 0)
+                throw new Exception("Count can't be less than 0!");
 
             var sale = _sales.FirstOrDefault(x=>x.Id == saleId);
             if (sale == null)
@@ -195,10 +198,32 @@ namespace MarketManagement.Services.Concrete
                 throw new Exception($"SaleItem with Id {productId} not found!");
 
             var product = _products.FirstOrDefault(x=>x.Id == saleItem.ProductId);
-            product!.Quantity += saleItem.Quantity;
-            sale.SaleItems.Remove(saleItem);
-
+            if (saleItem.Quantity > 0)
+            {
+                saleItem.Quantity -= count;
+                product!.Quantity += count;
+            }
+            else
+            {
+                sale.SaleItems.Remove(saleItem);
+            }
+            
             return productId;
+        }
+
+        public int DeleteSale(int saleId)
+        {
+            if (saleId <= 0)
+                throw new Exception("SaleId can't be less than 0!");
+
+            var sale = _sales.FirstOrDefault(x=>x.Id == saleId);
+            if (sale == null)
+                throw new Exception("SaleId not found");
+
+            if (saleId == sale.Id)
+                _sales.Remove(sale);
+
+            return sale.Id;
         }
     }
 }

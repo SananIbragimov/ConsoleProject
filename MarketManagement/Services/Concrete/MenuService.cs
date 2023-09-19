@@ -232,8 +232,20 @@ namespace MarketManagement.Services.Concrete
             Console.WriteLine("Enter ProductId: ");
             int productId = int.Parse(Console.ReadLine()!);
 
-            var withdrawProduct = marketService.WithdrawalProductFromSale(saleId, productId);
+            Console.WriteLine("Enter Quantity: ");
+            int count = int.Parse(Console.ReadLine()!);
+
+            var withdrawProduct = marketService.WithdrawalProductFromSale(saleId, productId, count);
             Console.WriteLine($"Withdraw the Product with ProductId={withdrawProduct}");
+        }
+
+        public static void MenuDeleteSale()
+        {
+            Console.WriteLine("Enter SaleId:");
+            int saleId = int.Parse(Console.ReadLine()!);
+
+            var deleteSale = marketService.DeleteSale(saleId);
+            Console.WriteLine($"Delete the sale with SaleId={deleteSale} from sale list");
         }
     }
 }

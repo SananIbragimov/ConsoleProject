@@ -97,7 +97,7 @@ namespace MarketManagement.Helpers
                         MenuService.MenuWithdrawalProductFromSale();
                         break;
                     case 3:
-
+                        MenuService.MenuDeleteSale();
                         break;
                     case 4:
                         MenuService.MenuGetSales();
