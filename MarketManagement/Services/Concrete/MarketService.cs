@@ -163,7 +163,17 @@ namespace MarketManagement.Services.Concrete
                     Quantity = item.Quantity,
                     TotalPrice = item.TotalPrice
                 };
-                sale.SaleItems.Add(saleItem);
+                var existingSaleItem = sale.SaleItems.FirstOrDefault(x=>x.ProductId == item.ProductId);
+                if(existingSaleItem != null)
+                {
+                    existingSaleItem.Quantity += item.Quantity;
+                    existingSaleItem.TotalPrice += item.TotalPrice;
+                }
+                else
+                {
+                    sale.SaleItems.Add(saleItem);
+                }
+                
                 product.Quantity -= saleItem.Quantity;
 
             }
@@ -222,8 +232,22 @@ namespace MarketManagement.Services.Concrete
             if (sale == null)
                 throw new Exception("SaleId not found");
 
-            if (saleId == sale.Id)
-                _sales.Remove(sale);
+            
+
+            foreach( var item in sale.SaleItems)
+            {
+                var products = _products.Where(x => x.Id == item.ProductId).ToList();
+                foreach (var product in products)
+                {
+                    if (item.SaleId == sale.Id)
+                    {
+                        product.Quantity += item.Quantity;
+                    }
+                }
+                
+            }
+
+            _sales.Remove(sale);
 
             return sale.Id;
         }

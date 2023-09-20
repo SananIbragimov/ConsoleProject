@@ -246,30 +246,42 @@ namespace MarketManagement.Services.Concrete
                     tableSale.AddRow(sale.Id, sale.Price, sale.DateTime);
                 }
                 tableSale.Write();
-                Console.WriteLine("---------------------------------------------------------------------------");
+
+                Console.WriteLine("---------------------------------------------------------------------------\n");
+
+                Console.WriteLine("Enter the sale id of the saleitem you want to show");
+                int saleId = int.Parse(Console.ReadLine()!);
+
+                if (saleId <= 0)
+                    throw new Exception("SaleId can't be less than 0!");
+
                 Console.WriteLine("SaleItems by saleId");
                 var forSaleItem = marketService.GetSales();
                 var productList = marketService.GetProducts();
 
-                var tableSaleItem = new ConsoleTable("SaleItem Id", "Product Name", "Product Price", "Quantity", "Total Price");
+                var tableSaleItem = new ConsoleTable("Sale Id", "Product Name", "Product Price", "Quantity", "Total Price");
                 foreach (var sale in forSaleItem)
                 {
-                    foreach (var item in sale.SaleItems)
+                    if(sale.Id == saleId)
                     {
-                        var product = productList.FirstOrDefault(x => x.Id == item.ProductId && sale.Id == item.SaleId);
-                        if (product == null)
-                            throw new Exception("Product not found");
+                        foreach (var item in sale.SaleItems)
+                        {
+                            var product = productList.FirstOrDefault(x => x.Id == item.ProductId);
+                            if (product == null)
+                                throw new Exception("Product not found");
 
-                        tableSaleItem.AddRow(item.SaleId, product.Name, product.Price, item.Quantity, item.TotalPrice);
+                            tableSaleItem.AddRow(item.SaleId, product.Name, product.Price, item.Quantity, item.TotalPrice);
+                        }
                     }
 
                 }
                 tableSaleItem.Write();
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
-            
+
         }
 
         public static void MenuWithdrawalProductFromSale()
