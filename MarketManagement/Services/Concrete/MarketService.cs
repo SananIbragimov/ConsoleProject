@@ -139,7 +139,7 @@ namespace MarketManagement.Services.Concrete
                 SaleItems = new List<SaleItem>()
             };
 
-            decimal totalPrice = 0;
+            //decimal totalPrice = 0;
             foreach (var item in saleItems)
             {
 
@@ -163,8 +163,8 @@ namespace MarketManagement.Services.Concrete
                     Quantity = item.Quantity,
                     TotalPrice = item.TotalPrice
                 };
-                var existingSaleItem = sale.SaleItems.FirstOrDefault(x=>x.ProductId == item.ProductId);
-                if(existingSaleItem != null)
+                var existingSaleItem = sale.SaleItems.FirstOrDefault(x => x.ProductId == item.ProductId);
+                if (existingSaleItem != null)
                 {
                     existingSaleItem.Quantity += item.Quantity;
                     existingSaleItem.TotalPrice += item.TotalPrice;
@@ -173,7 +173,7 @@ namespace MarketManagement.Services.Concrete
                 {
                     sale.SaleItems.Add(saleItem);
                 }
-                
+
                 product.Quantity -= saleItem.Quantity;
 
             }
@@ -190,7 +190,7 @@ namespace MarketManagement.Services.Concrete
 
         public int WithdrawalProductFromSale(int saleId, int productId, int count)
         {
-            if (saleId <= 0) 
+            if (saleId <= 0)
                 throw new Exception("saleId can't be less than 0!");
 
             if (productId <= 0)
@@ -199,27 +199,75 @@ namespace MarketManagement.Services.Concrete
             if (count <= 0)
                 throw new Exception("Count can't be less than 0!");
 
-            var sale = _sales.FirstOrDefault(x=>x.Id == saleId);
+            var sale = _sales.FirstOrDefault(x => x.Id == saleId);
             if (sale == null)
                 throw new Exception($"Sale with Id {saleId} not found!");
 
-            var saleItem = sale.SaleItems.FirstOrDefault(x=>x.ProductId == productId);
+            var saleItem = sale.SaleItems.FirstOrDefault(x => x.ProductId == productId);
             if (saleItem == null)
                 throw new Exception($"SaleItem with Id {productId} not found!");
 
-            var product = _products.FirstOrDefault(x=>x.Id == saleItem.ProductId);
+            var product = _products.FirstOrDefault(x => x.Id == saleItem.ProductId);
+
+            if (saleItem.Quantity < count)
+                throw new Exception($"Maximum {saleItem.Quantity} items can be removed from the product");
+
             if (saleItem.Quantity > 0)
             {
+
                 saleItem.Quantity -= count;
                 product!.Quantity += count;
                 saleItem.TotalPrice -= product.Price * count;
                 sale.Price -= saleItem.TotalPrice;
+
+                if (saleItem.Quantity == 0)
+                {
+                    sale.SaleItems.Remove(saleItem);
+                }
+
+                while (true)
+                {
+                    Console.Write("Do you want to delete another item? (yes/no): ");
+                    var response = Console.ReadLine()!.Trim().ToLower();
+
+                    if (response == "no")
+                    {
+                        break;
+                    }
+                    else if (response != "yes")
+                    {
+                        Console.WriteLine("Invalid input. Please enter 'yes' or 'no'.");
+                    }
+                    else
+                    {
+
+                        Console.Write("Enter saleId: ");
+                        if (!int.TryParse(Console.ReadLine(), out int nextSaleId))
+                        {
+                            Console.WriteLine("Invalid saleId. Please enter a valid number.");
+                            continue;
+                        }
+
+                        Console.Write("Enter productId: ");
+                        if (!int.TryParse(Console.ReadLine(), out int nextProductId))
+                        {
+                            Console.WriteLine("Invalid productId. Please enter a valid number.");
+                            continue;
+                        }
+
+                        Console.Write("Enter count: ");
+                        if (!int.TryParse(Console.ReadLine(), out int nextCount) || nextCount <= 0)
+                        {
+                            Console.WriteLine("Invalid count. Please enter a positive number.");
+                            continue;
+                        }
+
+
+                        WithdrawalProductFromSale(nextSaleId, nextProductId, nextCount);
+                    }
+                }
             }
-            else
-            {
-                sale.SaleItems.Remove(saleItem);
-            }
-            
+
             return productId;
         }
 
@@ -228,13 +276,13 @@ namespace MarketManagement.Services.Concrete
             if (saleId <= 0)
                 throw new Exception("SaleId can't be less than 0!");
 
-            var sale = _sales.FirstOrDefault(x=>x.Id == saleId);
+            var sale = _sales.FirstOrDefault(x => x.Id == saleId);
             if (sale == null)
                 throw new Exception("SaleId not found");
 
-            
 
-            foreach( var item in sale.SaleItems)
+
+            foreach (var item in sale.SaleItems)
             {
                 var products = _products.Where(x => x.Id == item.ProductId).ToList();
                 foreach (var product in products)
@@ -244,7 +292,7 @@ namespace MarketManagement.Services.Concrete
                         product.Quantity += item.Quantity;
                     }
                 }
-                
+
             }
 
             _sales.Remove(sale);
@@ -270,12 +318,21 @@ namespace MarketManagement.Services.Concrete
             if (min > max || min <= 0 || max <= 0)
                 throw new Exception("Min or max range is not correct");
 
-            var sales = _sales.Where(x=>x.Price >= min && x.Price <= max).ToList();
+            var sales = _sales.Where(x => x.Price >= min && x.Price <= max).ToList();
             if (sales is null)
                 throw new Exception("Sale List not found");
 
             return sales;
-            
+
+        }
+
+        public List<Sale> ShowSaleByDate(DateTime date)
+        {
+            var sales = _sales.Where(x => x.DateTime == date).ToList();
+            if (sales is null)
+                throw new Exception("SaleList not found");
+
+            return sales;
         }
     }
 }

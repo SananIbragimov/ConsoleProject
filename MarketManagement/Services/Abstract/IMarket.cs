@@ -26,6 +26,7 @@ namespace MarketManagement.Services.Abstract
         public int DeleteSale(int saleId);
         public List<Sale> ShowSalesByDateRange(DateTime startDate, DateTime endDate);
         public List<Sale> ShowSalesByPriceRange(decimal min, decimal max);
+        public List<Sale> ShowSaleByDate(DateTime date);
 
     }
 }
