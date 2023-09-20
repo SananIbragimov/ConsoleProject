@@ -8,7 +8,7 @@ namespace MarketManagement
         {
             int selectedOption;
 
-            Console.WriteLine("Welcome to Hospital!");
+            Console.WriteLine("Welcome to Store!");
 
             do
             {

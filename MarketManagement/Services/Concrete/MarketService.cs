@@ -202,6 +202,8 @@ namespace MarketManagement.Services.Concrete
             {
                 saleItem.Quantity -= count;
                 product!.Quantity += count;
+                saleItem.TotalPrice -= product.Price * count;
+                sale.Price -= saleItem.TotalPrice;
             }
             else
             {

@@ -139,38 +139,50 @@ namespace MarketManagement.Services.Concrete
 
         public static void MenuShowProductsByPriceRange()
         {
-            Console.WriteLine("Enter minimum price");
-            decimal min = decimal.Parse(Console.ReadLine()!);
-
-            Console.WriteLine("Enter maximum price");
-            decimal max = decimal.Parse(Console.ReadLine()!);
-
-            var productListByPrice = marketService.ShowProductsByRangePrice(min, max);
-
-            var table = new ConsoleTable("ID", "Name", "Category", "Price", "Quantity");
-            foreach (var product in productListByPrice)
+            try
             {
-                table.AddRow(product.Id, product.Name, product.Category, product.Price, product.Quantity);
-            }
+                Console.WriteLine("Enter minimum price");
+                decimal min = decimal.Parse(Console.ReadLine()!);
 
-            table.Write();
+                Console.WriteLine("Enter maximum price");
+                decimal max = decimal.Parse(Console.ReadLine()!);
+
+                var productListByPrice = marketService.ShowProductsByRangePrice(min, max);
+
+                var table = new ConsoleTable("ID", "Name", "Category", "Price", "Quantity");
+                foreach (var product in productListByPrice)
+                {
+                    table.AddRow(product.Id, product.Name, product.Category, product.Price, product.Quantity);
+                }
+
+                table.Write();
+            }catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
 
         }
 
         public static void MenuSearchProductsByName()
         {
-            Console.WriteLine("Enter the search word");
-            string text = Console.ReadLine()!;
-
-            var productListByName = marketService.SearchProductsByName(text);
-
-            var table = new ConsoleTable("ID", "Name", "Category", "Price", "Quantity");
-            foreach (var product in productListByName)
+            try
             {
-                table.AddRow(product.Id, product.Name, product.Category, product.Price, product.Quantity);
-            }
+                Console.WriteLine("Enter the search word");
+                string text = Console.ReadLine()!;
 
-            table.Write();
+                var productListByName = marketService.SearchProductsByName(text);
+
+                var table = new ConsoleTable("ID", "Name", "Category", "Price", "Quantity");
+                foreach (var product in productListByName)
+                {
+                    table.AddRow(product.Id, product.Name, product.Category, product.Price, product.Quantity);
+                }
+
+                table.Write();
+            }catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
 
         // MenuService static methods for sales
@@ -196,6 +208,14 @@ namespace MarketManagement.Services.Concrete
                         ProductId = id,
                         Quantity = quantity
                     }); ;
+
+                    Console.WriteLine("Do you want to continue adding saleitem? (yes/no):");
+                    var keepAdding = Console.ReadLine()!.Trim().ToLower();
+                    if(keepAdding == "no")
+                    {
+                        break;
+                    }
+                    
                 }
 
                 Console.WriteLine("Enter datetime");
@@ -212,31 +232,65 @@ namespace MarketManagement.Services.Concrete
 
         public static void MenuGetSales()
         {
-            var saleList = marketService.GetSales();
-            var table = new ConsoleTable("Sale Id", "ProductId", "SaleId", "Quantity", "Total Price");
-
-            foreach (var sale in saleList)
+            try
             {
-                foreach (var item in sale.SaleItems)
-                    table.AddRow(sale.Id, item.ProductId, item.SaleId, item.Quantity, item.TotalPrice);
-            }
+                var saleList = marketService.GetSales();
+                var tableSale = new ConsoleTable("Sale Id", "Price", "DateTime");
+                foreach (var sale in saleList)
+                {
+                    sale.Price = 0;
+                    foreach (var item in sale.SaleItems)
+                    {
+                        sale.Price += item.TotalPrice;
+                    }
+                    tableSale.AddRow(sale.Id, sale.Price, sale.DateTime);
+                }
+                tableSale.Write();
+                Console.WriteLine("---------------------------------------------------------------------------");
+                Console.WriteLine("SaleItems by saleId");
+                var forSaleItem = marketService.GetSales();
+                var productList = marketService.GetProducts();
 
-            table.Write();
+                var tableSaleItem = new ConsoleTable("SaleItem Id", "Product Name", "Product Price", "Quantity", "Total Price");
+                foreach (var sale in forSaleItem)
+                {
+                    foreach (var item in sale.SaleItems)
+                    {
+                        var product = productList.FirstOrDefault(x => x.Id == item.ProductId && sale.Id == item.SaleId);
+                        if (product == null)
+                            throw new Exception("Product not found");
+
+                        tableSaleItem.AddRow(item.SaleId, product.Name, product.Price, item.Quantity, item.TotalPrice);
+                    }
+
+                }
+                tableSaleItem.Write();
+            }catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            
         }
 
         public static void MenuWithdrawalProductFromSale()
         {
-            Console.WriteLine("Enter SaleId: ");
-            int saleId = int.Parse(Console.ReadLine()!);
+            try
+            {
+                Console.WriteLine("Enter SaleId: ");
+                int saleId = int.Parse(Console.ReadLine()!);
 
-            Console.WriteLine("Enter ProductId: ");
-            int productId = int.Parse(Console.ReadLine()!);
+                Console.WriteLine("Enter ProductId: ");
+                int productId = int.Parse(Console.ReadLine()!);
 
-            Console.WriteLine("Enter Quantity: ");
-            int count = int.Parse(Console.ReadLine()!);
+                Console.WriteLine("Enter Quantity: ");
+                int count = int.Parse(Console.ReadLine()!);
 
-            var withdrawProduct = marketService.WithdrawalProductFromSale(saleId, productId, count);
-            Console.WriteLine($"Withdraw the Product with ProductId={withdrawProduct}");
+                var withdrawProduct = marketService.WithdrawalProductFromSale(saleId, productId, count);
+                Console.WriteLine($"Withdraw the Product with ProductId={withdrawProduct}");
+            }catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
 
         public static void MenuDeleteSale()
