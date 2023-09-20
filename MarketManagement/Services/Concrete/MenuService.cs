@@ -322,12 +322,31 @@ namespace MarketManagement.Services.Concrete
             Console.WriteLine("Enter End date:");
             DateTime endDate = DateTime.ParseExact(Console.ReadLine()!, "dd.MM.yyyy HH:mm:ss", null);
 
-            var saleByDate = marketService.ShowSalesByDateRange(startDate, endDate);
+            var saleByDateRange = marketService.ShowSalesByDateRange(startDate, endDate);
 
-            var table = new ConsoleTable("Sale Id","Price","DateTime");
-            foreach (var sale in saleByDate)
+            var table = new ConsoleTable("Sale Id","Price","SaleItems Count","DateTime");
+            foreach (var sale in saleByDateRange)
             {
-                table.AddRow(sale.Id,sale.Price,sale.DateTime);
+                table.AddRow(sale.Id, sale.Price, sale.SaleItems.Count, sale.DateTime);
+            }
+
+            table.Write();
+        }
+
+        public static void MenuShowSalesByPriceRange()
+        {
+            Console.WriteLine("Enter minimum price");
+            decimal min = decimal.Parse(Console.ReadLine()!);
+
+            Console.WriteLine("Enter minimum price");
+            decimal max = decimal.Parse(Console.ReadLine()!);
+
+            var saleByPriceRange = marketService.ShowSalesByPriceRange(min,max);
+
+            var table = new ConsoleTable("Sale Id", "Price", "SaleItems Count", "DateTime");
+            foreach (var sale in saleByPriceRange)
+            {
+                table.AddRow(sale.Id, sale.Price, sale.SaleItems.Count, sale.DateTime);
             }
 
             table.Write();

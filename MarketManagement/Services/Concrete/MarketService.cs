@@ -260,7 +260,7 @@ namespace MarketManagement.Services.Concrete
 
             var sales = _sales.Where(x => x.DateTime >= startDate && x.DateTime <= endDate).ToList();
             if (sales is null)
-                throw new Exception("List not found");
+                throw new Exception("Sale List not found");
 
             return sales;
         }
@@ -271,6 +271,8 @@ namespace MarketManagement.Services.Concrete
                 throw new Exception("Min or max range is not correct");
 
             var sales = _sales.Where(x=>x.Price >= min && x.Price <= max).ToList();
+            if (sales is null)
+                throw new Exception("Sale List not found");
 
             return sales;
             

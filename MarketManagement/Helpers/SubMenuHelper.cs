@@ -106,7 +106,7 @@ namespace MarketManagement.Helpers
                         MenuService.MenuShowSalesByDateRange();
                         break;
                     case 6:
-
+                        MenuService.MenuShowSalesByPriceRange();
                         break;
                     case 7:
 
