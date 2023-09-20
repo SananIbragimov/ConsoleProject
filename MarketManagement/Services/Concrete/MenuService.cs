@@ -235,7 +235,7 @@ namespace MarketManagement.Services.Concrete
             try
             {
                 var saleList = marketService.GetSales();
-                var tableSale = new ConsoleTable("Sale Id", "Price", "DateTime");
+                var tableSale = new ConsoleTable("Sale Id", "Price", "SaleItems Count", "DateTime");
                 foreach (var sale in saleList)
                 {
                     sale.Price = 0;
@@ -243,7 +243,7 @@ namespace MarketManagement.Services.Concrete
                     {
                         sale.Price += item.TotalPrice;
                     }
-                    tableSale.AddRow(sale.Id, sale.Price, sale.DateTime);
+                    tableSale.AddRow(sale.Id, sale.Price, sale.SaleItems.Count, sale.DateTime);
                 }
                 tableSale.Write();
 
@@ -313,5 +313,25 @@ namespace MarketManagement.Services.Concrete
             var deleteSale = marketService.DeleteSale(saleId);
             Console.WriteLine($"Delete the sale with SaleId={deleteSale} from sale list");
         }
+
+        public static void MenuShowSalesByDateRange()
+        {
+            Console.WriteLine("Enter Start date:");
+            DateTime startDate = DateTime.ParseExact(Console.ReadLine()!,"dd.MM.yyyy HH:mm:ss",null);
+
+            Console.WriteLine("Enter End date:");
+            DateTime endDate = DateTime.ParseExact(Console.ReadLine()!, "dd.MM.yyyy HH:mm:ss", null);
+
+            var saleByDate = marketService.ShowSalesByDateRange(startDate, endDate);
+
+            var table = new ConsoleTable("Sale Id","Price","DateTime");
+            foreach (var sale in saleByDate)
+            {
+                table.AddRow(sale.Id,sale.Price,sale.DateTime);
+            }
+
+            table.Write();
+        }
+
     }
 }

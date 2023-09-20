@@ -24,6 +24,8 @@ namespace MarketManagement.Services.Abstract
         public List<Sale> GetSales();
         public int WithdrawalProductFromSale(int saleId, int productId, int count);
         public int DeleteSale(int saleId);
+        public List<Sale> ShowSalesByDateRange(DateTime startDate, DateTime endDate);
+        public List<Sale> ShowSalesByPriceRange(decimal min, decimal max);
 
     }
 }

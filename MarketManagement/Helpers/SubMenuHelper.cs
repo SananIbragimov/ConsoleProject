@@ -103,7 +103,7 @@ namespace MarketManagement.Helpers
                         MenuService.MenuGetSales();
                         break;
                     case 5:
-
+                        MenuService.MenuShowSalesByDateRange();
                         break;
                     case 6:
 

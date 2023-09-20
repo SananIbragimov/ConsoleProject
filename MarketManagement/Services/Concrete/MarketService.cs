@@ -251,5 +251,29 @@ namespace MarketManagement.Services.Concrete
 
             return sale.Id;
         }
+
+
+        public List<Sale> ShowSalesByDateRange(DateTime startDate, DateTime endDate)
+        {
+            if (startDate > endDate)
+                throw new Exception("StartDate can't be larger than EndDate");
+
+            var sales = _sales.Where(x => x.DateTime >= startDate && x.DateTime <= endDate).ToList();
+            if (sales is null)
+                throw new Exception("List not found");
+
+            return sales;
+        }
+
+        public List<Sale> ShowSalesByPriceRange(decimal min, decimal max)
+        {
+            if (min > max || min <= 0 || max <= 0)
+                throw new Exception("Min or max range is not correct");
+
+            var sales = _sales.Where(x=>x.Price >= min && x.Price <= max).ToList();
+
+            return sales;
+            
+        }
     }
 }
