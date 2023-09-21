@@ -188,7 +188,7 @@ namespace MarketManagement.Services.Concrete
             return _sales;
         }
 
-        public int WithdrawalProductFromSale(int saleId, int productId, int count)
+        public int ReturnProductFromSale(int saleId, int productId, int count)
         {
             if (saleId <= 0)
                 throw new Exception("saleId can't be less than 0!");
@@ -241,29 +241,28 @@ namespace MarketManagement.Services.Concrete
                     else
                     {
 
-                        Console.Write("Enter saleId: ");
+                        Console.WriteLine("Enter saleId: ");
                         if (!int.TryParse(Console.ReadLine(), out int nextSaleId))
                         {
                             Console.WriteLine("Invalid saleId. Please enter a valid number.");
                             continue;
                         }
 
-                        Console.Write("Enter productId: ");
+                        Console.WriteLine("Enter productId: ");
                         if (!int.TryParse(Console.ReadLine(), out int nextProductId))
                         {
                             Console.WriteLine("Invalid productId. Please enter a valid number.");
                             continue;
                         }
 
-                        Console.Write("Enter count: ");
+                        Console.WriteLine("Enter count: ");
                         if (!int.TryParse(Console.ReadLine(), out int nextCount) || nextCount <= 0)
                         {
                             Console.WriteLine("Invalid count. Please enter a positive number.");
                             continue;
                         }
 
-
-                        WithdrawalProductFromSale(nextSaleId, nextProductId, nextCount);
+                        ReturnProductFromSale(nextSaleId, nextProductId, nextCount);
                     }
                 }
             }
@@ -333,6 +332,19 @@ namespace MarketManagement.Services.Concrete
                 throw new Exception("SaleList not found");
 
             return sales;
+        }
+
+        public List<Sale> ShowSaleItemsBySaleId(int saleId)
+        {
+            if (saleId <= 0)
+                throw new Exception("SaleId can't be less than 0!");
+
+            var equalSaleId = _sales.Where(x => x.Id == saleId).ToList();
+            if (equalSaleId is null)
+                throw new Exception($"Sale with SaleId = {saleId} is not available");
+
+            return equalSaleId;
+
         }
     }
 }

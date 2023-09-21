@@ -94,7 +94,7 @@ namespace MarketManagement.Helpers
                         MenuService.MenuAddSale();
                         break;
                     case 2:
-                        MenuService.MenuWithdrawalProductFromSale();
+                        MenuService.MenuReturnProductFromSale();
                         break;
                     case 3:
                         MenuService.MenuDeleteSale();
@@ -112,7 +112,7 @@ namespace MarketManagement.Helpers
                         MenuService.MenuShowSaleByDate();
                         break;
                     case 8:
-
+                        MenuService.MenuShowSaleItemsBySaleId();
                         break;
                     case 0:
                         break;

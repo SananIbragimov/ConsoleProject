@@ -199,10 +199,10 @@ namespace MarketManagement.Services.Concrete
                 var saleItems = new List<SaleItem>();
                 for (int i = 1; i <= itemCount; i++)
                 {
-                    Console.WriteLine($"Enter product Id for item {i}");
+                    Console.WriteLine($"Enter product Id for SaleItem {i}");
                     int id = int.Parse(Console.ReadLine()!);
 
-                    Console.WriteLine($"Enter Product quantity for product {id}");
+                    Console.WriteLine($"Enter Product quantity for ProductId {id}");
                     int quantity = int.Parse(Console.ReadLine()!);
 
                     saleItems.Add(new SaleItem()
@@ -226,59 +226,22 @@ namespace MarketManagement.Services.Concrete
 
         public static void MenuGetSales()
         {
-            try
+            var saleList = marketService.GetSales();
+            var tableSale = new ConsoleTable("Sale Id", "Price", "SaleItems Count", "DateTime");
+            foreach (var sale in saleList)
             {
-                var saleList = marketService.GetSales();
-                var tableSale = new ConsoleTable("Sale Id", "Price", "SaleItems Count", "DateTime");
-                foreach (var sale in saleList)
+                sale.Price = 0;
+                foreach (var item in sale.SaleItems)
                 {
-                    sale.Price = 0;
-                    foreach (var item in sale.SaleItems)
-                    {
-                        sale.Price += item.TotalPrice;
-                    }
-                    tableSale.AddRow(sale.Id, sale.Price, sale.SaleItems.Count, sale.DateTime);
+                    sale.Price += item.TotalPrice;
                 }
-                tableSale.Write();
-
-                Console.WriteLine("---------------------------------------------------------------------------\n");
-
-                Console.WriteLine("Enter the sale id of the saleitem you want to show");
-                int saleId = int.Parse(Console.ReadLine()!);
-
-                if (saleId <= 0)
-                    throw new Exception("SaleId can't be less than 0!");
-
-                Console.WriteLine("SaleItems by saleId");
-                var forSaleItem = marketService.GetSales();
-                var productList = marketService.GetProducts();
-
-                var tableSaleItem = new ConsoleTable("Sale Id", "Product Name", "Product Price", "Quantity", "Total Price");
-                foreach (var sale in forSaleItem)
-                {
-                    if (sale.Id == saleId)
-                    {
-                        foreach (var item in sale.SaleItems)
-                        {
-                            var product = productList.FirstOrDefault(x => x.Id == item.ProductId);
-                            if (product == null)
-                                throw new Exception("Product not found");
-
-                            tableSaleItem.AddRow(item.SaleId, product.Name, product.Price, item.Quantity, item.TotalPrice);
-                        }
-                    }
-
-                }
-                tableSaleItem.Write();
+                tableSale.AddRow(sale.Id, sale.Price, sale.SaleItems.Count, sale.DateTime);
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
+            tableSale.Write();
 
         }
 
-        public static void MenuWithdrawalProductFromSale()
+        public static void MenuReturnProductFromSale()
         {
             try
             {
@@ -291,7 +254,7 @@ namespace MarketManagement.Services.Concrete
                 Console.WriteLine("Enter Quantity: ");
                 int count = int.Parse(Console.ReadLine()!);
 
-                var withdrawProduct = marketService.WithdrawalProductFromSale(saleId, productId, count);
+                var withdrawProduct = marketService.ReturnProductFromSale(saleId, productId, count);
                 Console.WriteLine($"Withdraw the Product with ProductId={withdrawProduct}");
             }
             catch (Exception ex)
@@ -363,5 +326,30 @@ namespace MarketManagement.Services.Concrete
             table.Write();
         }
 
+        public static void MenuShowSaleItemsBySaleId()
+        {
+            Console.WriteLine("Enter the sale id of the saleitem you want to show");
+            int saleId = int.Parse(Console.ReadLine()!);
+
+            var saleBySaleId = marketService.ShowSaleItemsBySaleId(saleId);
+            var productList = marketService.GetProducts();
+
+            Console.WriteLine("SaleItems by saleId");
+
+            var tableSaleItem = new ConsoleTable("Sale Id", "Product Name", "Product Price", "Quantity", "Total Price");
+            foreach (var sale in saleBySaleId)
+            {
+                foreach (var item in sale.SaleItems)
+                {
+                    var product = productList.FirstOrDefault(x => x.Id == item.ProductId);
+                    if (product == null)
+                        throw new Exception("Product not found");
+
+                    tableSaleItem.AddRow(item.SaleId, product.Name, product.Price, item.Quantity, item.TotalPrice);
+                }
+
+            }
+            tableSaleItem.Write();
+        }
     }
 }
