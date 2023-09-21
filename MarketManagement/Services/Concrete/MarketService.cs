@@ -133,6 +133,7 @@ namespace MarketManagement.Services.Concrete
             if (saleItems == null || !saleItems.Any())
                 throw new Exception("There are no sale items");
 
+
             var sale = new Sale()
             {
                 DateTime = dateTime,

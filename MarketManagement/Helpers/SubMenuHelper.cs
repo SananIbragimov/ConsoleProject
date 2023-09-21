@@ -71,7 +71,7 @@ namespace MarketManagement.Helpers
             do
             {
                 Console.WriteLine("1. Add Sale");
-                Console.WriteLine("2. Withdrawal Product From Sale");
+                Console.WriteLine("2. Return Product From Sale");
                 Console.WriteLine("3. Delete Sale");
                 Console.WriteLine("4. Show Sales");
                 Console.WriteLine("5. Show Sales By Date Range");

@@ -212,8 +212,25 @@ namespace MarketManagement.Services.Concrete
                     });
                 }
 
+
                 Console.WriteLine("Enter datetime");
-                var dateTime = DateTime.ParseExact(Console.ReadLine()!, "dd.MM.yyyy HH:mm:ss", null);
+                DateTime dateTime;
+
+                
+                string userInput = Console.ReadLine()!;
+
+                if (!string.IsNullOrEmpty(userInput))
+                {
+                    dateTime = DateTime.ParseExact(userInput, "dd/MM/yyyy HH:mm:ss", null);
+                }
+                else
+                {
+                    dateTime = DateTime.Now;
+                }
+
+                Console.WriteLine("Seçilen Tarih ve Saat: " + dateTime);
+
+
 
                 var saleItemsCount = marketService.AddSale(saleItems, dateTime);
                 Console.WriteLine($"SaleItems count: {saleItemsCount}");
@@ -275,10 +292,10 @@ namespace MarketManagement.Services.Concrete
         public static void MenuShowSalesByDateRange()
         {
             Console.WriteLine("Enter Start date:");
-            DateTime startDate = DateTime.ParseExact(Console.ReadLine()!, "dd.MM.yyyy HH:mm:ss", null);
+            DateTime startDate = DateTime.ParseExact(Console.ReadLine()!, "dd/MM/yyyy HH:mm:ss", null);
 
             Console.WriteLine("Enter End date:");
-            DateTime endDate = DateTime.ParseExact(Console.ReadLine()!, "dd.MM.yyyy HH:mm:ss", null);
+            DateTime endDate = DateTime.ParseExact(Console.ReadLine()!, "dd/MM/yyyy HH:mm:ss", null);
 
             var salesByDateRange = marketService.ShowSalesByDateRange(startDate, endDate);
 
@@ -313,7 +330,7 @@ namespace MarketManagement.Services.Concrete
         public static void MenuShowSaleByDate()
         {
             Console.WriteLine("Enter datetime:");
-            var date = DateTime.ParseExact(Console.ReadLine()!, "dd.MM.yyyy HH:mm:ss", null);
+            var date = DateTime.ParseExact(Console.ReadLine()!, "dd/MM/yyyy HH:mm:ss", null);
 
             var saleByDate = marketService.ShowSaleByDate(date);
 
