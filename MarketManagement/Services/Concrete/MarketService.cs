@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -84,13 +85,24 @@ namespace MarketManagement.Services.Concrete
                 throw new Exception("Product not found");
 
             Console.WriteLine($"Are you sure you want to delete product '{deleteProduct.Name}'? (yes/no):");
-            string confirm = Console.ReadLine()!.Trim().ToLower();
-            if (confirm == "yes")
+            while (true)
             {
-                _products.Remove(deleteProduct);
-                return true;
+                string confirm = Console.ReadLine()!.Trim().ToLower();
+                if (confirm == "yes")
+                {
+                    _products.Remove(deleteProduct);
+                    return true;
+                }
+                else if (confirm == "no")
+                {
+                    return false;
+                }
+                else
+                {
+                    Console.WriteLine("Invalid input. Please enter 'yes' or 'no':");
+                    continue;
+                }
             }
-            return false;
         }
 
         // This method returns the _products list
@@ -99,6 +111,7 @@ namespace MarketManagement.Services.Concrete
             return _products;
         }
 
+        // This method displays the products by their category
         public List<Product> ShowProductsByCategory(Category category)
         {
             if (!Enum.IsDefined(typeof(Category), category))
@@ -108,7 +121,7 @@ namespace MarketManagement.Services.Concrete
             return productListByCategory;
         }
 
-
+        // This method displays the products by their price range
         public List<Product> ShowProductsByRangePrice(decimal min, decimal max)
         {
             if (min <= 0 && max <= 0)
@@ -118,6 +131,7 @@ namespace MarketManagement.Services.Concrete
             return productListByPrice;
         }
 
+        // This method displays the products by their name
         public List<Product> SearchProductsByName(string text)
         {
             if (String.IsNullOrWhiteSpace(text))
@@ -127,6 +141,7 @@ namespace MarketManagement.Services.Concrete
             return productListByName;
         }
 
+        // This method adds sales to the _sales list
         public int AddSale(List<SaleItem> saleItems, DateTime dateTime)
         {
 
@@ -184,11 +199,7 @@ namespace MarketManagement.Services.Concrete
             return sale.SaleItems.Count;
         }
 
-        public List<Sale> GetSales()
-        {
-            return _sales;
-        }
-
+        // This method refund the product from sale
         public int ReturnProductFromSale(int saleId, int productId, int count)
         {
             if (saleId <= 0)
@@ -271,6 +282,7 @@ namespace MarketManagement.Services.Concrete
             return productId;
         }
 
+        // This method completely deletes the sale
         public int DeleteSale(int saleId)
         {
             if (saleId <= 0)
@@ -300,7 +312,13 @@ namespace MarketManagement.Services.Concrete
             return sale.Id;
         }
 
+        // This method returns the _sales list
+        public List<Sale> GetSales()
+        {
+            return _sales;
+        }
 
+        // This method displays the sales by date range
         public List<Sale> ShowSalesByDateRange(DateTime startDate, DateTime endDate)
         {
             if (startDate > endDate)
@@ -313,6 +331,7 @@ namespace MarketManagement.Services.Concrete
             return sales;
         }
 
+        // This method displays the sales by price range
         public List<Sale> ShowSalesByPriceRange(decimal min, decimal max)
         {
             if (min > max || min <= 0 || max <= 0)
@@ -326,6 +345,7 @@ namespace MarketManagement.Services.Concrete
 
         }
 
+        // This method displays the sales according to a specific date
         public List<Sale> ShowSaleByDate(DateTime date)
         {
             var sales = _sales.Where(x => x.DateTime == date).ToList();
