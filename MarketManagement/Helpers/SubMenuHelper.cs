@@ -77,7 +77,7 @@ namespace MarketManagement.Helpers
                 Console.WriteLine("5. Show Sales By Date Range");
                 Console.WriteLine("6. Show Sales By Price Range");
                 Console.WriteLine("7. Show Sale By Specific Date");
-                Console.WriteLine("8. Show Sale By Specific ID");
+                Console.WriteLine("8. Show SaleItems By SaleId");
 
                 Console.WriteLine("0. Exit");
                 Console.WriteLine("----------------------------");

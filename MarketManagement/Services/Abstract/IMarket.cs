@@ -22,7 +22,7 @@ namespace MarketManagement.Services.Abstract
         // Interface methods for sales
         public int AddSale(List<SaleItem> saleItems, DateTime dateTime);
         public int ReturnProductFromSale(int saleId, int productId, int count);
-        public int DeleteSale(int saleId);
+        public bool DeleteSale(int saleId);
         public List<Sale> GetSales();
         public List<Sale> ShowSalesByDateRange(DateTime startDate, DateTime endDate);
         public List<Sale> ShowSalesByPriceRange(decimal min, decimal max);

@@ -258,17 +258,17 @@ namespace MarketManagement.Services.Concrete
         {
             try
             {
-                Console.WriteLine("Enter SaleId: ");
+                Console.WriteLine("Enter SaleId:");
                 int saleId = int.Parse(Console.ReadLine()!);
 
-                Console.WriteLine("Enter ProductId: ");
+                Console.WriteLine("Enter ProductId:");
                 int productId = int.Parse(Console.ReadLine()!);
 
-                Console.WriteLine("Enter Quantity: ");
+                Console.WriteLine("Enter Quantity:");
                 int count = int.Parse(Console.ReadLine()!);
 
-                var withdrawProduct = marketService.ReturnProductFromSale(saleId, productId, count);
-                Console.WriteLine($"Withdraw the Product with ProductId={withdrawProduct}");
+                var returnProduct = marketService.ReturnProductFromSale(saleId, productId, count);
+                Console.WriteLine($"Return the Product with ProductId = {returnProduct}");
             }
             catch (Exception ex)
             {
@@ -278,11 +278,24 @@ namespace MarketManagement.Services.Concrete
 
         public static void MenuDeleteSale()
         {
-            Console.WriteLine("Enter SaleId:");
-            int saleId = int.Parse(Console.ReadLine()!);
+            try
+            {
+                Console.WriteLine("Enter the saleId of the sale you want to delete:");
+                int saleId = int.Parse(Console.ReadLine()!);
 
-            var deleteSale = marketService.DeleteSale(saleId);
-            Console.WriteLine($"Delete the sale with SaleId={deleteSale} from sale list");
+                var deleteSaleId = marketService.DeleteSale(saleId);
+                if (deleteSaleId)
+                {
+                    Console.WriteLine("Sale deleted");
+                }
+                else
+                {
+                    Console.WriteLine("Sale not deleted");
+                }
+            }catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
 
         public static void MenuShowSalesByDateRange()

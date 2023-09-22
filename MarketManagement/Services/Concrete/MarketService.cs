@@ -242,17 +242,8 @@ namespace MarketManagement.Services.Concrete
                     Console.Write("Do you want to delete another item? (yes/no): ");
                     var response = Console.ReadLine()!.Trim().ToLower();
 
-                    if (response == "no")
+                    if (response == "yes")
                     {
-                        break;
-                    }
-                    else if (response != "yes")
-                    {
-                        Console.WriteLine("Invalid input. Please enter 'yes' or 'no'.");
-                    }
-                    else
-                    {
-
                         Console.WriteLine("Enter saleId: ");
                         if (!int.TryParse(Console.ReadLine(), out int nextSaleId))
                         {
@@ -276,14 +267,24 @@ namespace MarketManagement.Services.Concrete
 
                         ReturnProductFromSale(nextSaleId, nextProductId, nextCount);
                     }
+                    else if (response == "no")
+                    {
+                        return productId;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Invalid input. Please enter 'yes' or 'no':");
+                        continue;
+
+                    }
                 }
             }
-
             return productId;
+            
         }
 
         // This method completely deletes the sale
-        public int DeleteSale(int saleId)
+        public bool DeleteSale(int saleId)
         {
             if (saleId <= 0)
                 throw new Exception("SaleId can't be less than 0!");
@@ -293,23 +294,38 @@ namespace MarketManagement.Services.Concrete
                 throw new Exception("SaleId not found");
 
 
-
-            foreach (var item in sale.SaleItems)
+            Console.WriteLine($"Are you sure you want to delete sale with SaleId = '{sale.Id}'? (yes/no):");
+            while (true)
             {
-                var products = _products.Where(x => x.Id == item.ProductId).ToList();
-                foreach (var product in products)
-                {
-                    if (item.SaleId == sale.Id)
-                    {
-                        product.Quantity += item.Quantity;
-                    }
-                }
+                var confirm = Console.ReadLine()!.Trim().ToLower();
 
+                if(confirm == "yes")
+                {
+                    foreach (var item in sale.SaleItems)
+                    {
+                        var products = _products.FirstOrDefault(x => x.Id == item.ProductId);
+                        if (products == null)
+                            throw new Exception("Product not found");
+
+                        if (item.SaleId == sale.Id)
+                        {
+                            products.Quantity += item.Quantity;
+                        }
+                    }
+                    _sales.Remove(sale);
+                    return true;
+                }
+                else if(confirm == "no")
+                {
+                    return false;
+                }
+                else
+                {
+                    Console.WriteLine("Invalid input. Please enter 'yes' or 'no':");
+                    continue;
+                }
             }
 
-            _sales.Remove(sale);
-
-            return sale.Id;
         }
 
         // This method returns the _sales list
