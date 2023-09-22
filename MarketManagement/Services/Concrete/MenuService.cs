@@ -212,11 +212,9 @@ namespace MarketManagement.Services.Concrete
                     });
                 }
 
+                Console.WriteLine("Enter datetime:");
 
-                Console.WriteLine("Enter datetime");
                 DateTime dateTime;
-
-                
                 string userInput = Console.ReadLine()!;
 
                 if (!string.IsNullOrEmpty(userInput))
@@ -228,9 +226,7 @@ namespace MarketManagement.Services.Concrete
                     dateTime = DateTime.Now;
                 }
 
-                Console.WriteLine("Seçilen Tarih ve Saat: " + dateTime);
-
-
+                Console.WriteLine("Selected Date and Time: " + dateTime);
 
                 var saleItemsCount = marketService.AddSale(saleItems, dateTime);
                 Console.WriteLine($"SaleItems count: {saleItemsCount}");
@@ -244,15 +240,15 @@ namespace MarketManagement.Services.Concrete
         public static void MenuGetSales()
         {
             var saleList = marketService.GetSales();
-            var tableSale = new ConsoleTable("Sale Id", "Price", "SaleItems Count", "DateTime");
+            var tableSale = new ConsoleTable("Sale Id", "Amount", "SaleItems Count", "DateTime");
             foreach (var sale in saleList)
             {
-                sale.Price = 0;
+                sale.Amount = 0;
                 foreach (var item in sale.SaleItems)
                 {
-                    sale.Price += item.TotalPrice;
+                    sale.Amount += item.TotalPrice;
                 }
-                tableSale.AddRow(sale.Id, sale.Price, sale.SaleItems.Count, sale.DateTime);
+                tableSale.AddRow(sale.Id, sale.Amount, sale.SaleItems.Count, sale.DateTime);
             }
             tableSale.Write();
 
@@ -291,18 +287,41 @@ namespace MarketManagement.Services.Concrete
 
         public static void MenuShowSalesByDateRange()
         {
-            Console.WriteLine("Enter Start date:");
-            DateTime startDate = DateTime.ParseExact(Console.ReadLine()!, "dd/MM/yyyy HH:mm:ss", null);
+            Console.WriteLine("Enter start date (dd/MM/yyyy HH:mm:ss):");
+            DateTime startDate;
+            string startInput = Console.ReadLine()!;
 
-            Console.WriteLine("Enter End date:");
-            DateTime endDate = DateTime.ParseExact(Console.ReadLine()!, "dd/MM/yyyy HH:mm:ss", null);
+            Console.WriteLine("Enter end date (dd/MM/yyyy HH:mm:ss):");
+            DateTime endDate;
+            string endInput = Console.ReadLine()!;
+
+            if (!string.IsNullOrEmpty(startInput))
+            {
+                startDate = DateTime.ParseExact(startInput, "dd/MM/yyyy HH:mm:ss", null);
+            }
+            else
+            {
+                startDate = DateTime.Now;
+            }
+
+            if (!string.IsNullOrEmpty(endInput))
+            {
+                endDate = DateTime.ParseExact(endInput, "dd/MM/yyyy HH:mm:ss", null);
+            }
+            else
+            {
+                endDate = DateTime.Now;
+            }
+
+            Console.WriteLine("Selected Start Date: " + startDate);
+            Console.WriteLine("Selected End Date: " + endDate);
 
             var salesByDateRange = marketService.ShowSalesByDateRange(startDate, endDate);
 
-            var table = new ConsoleTable("Sale Id", "Price", "SaleItems Count", "DateTime");
+            var table = new ConsoleTable("Sale Id", "Amount", "SaleItems Count", "DateTime");
             foreach (var sale in salesByDateRange)
             {
-                table.AddRow(sale.Id, sale.Price, sale.SaleItems.Count, sale.DateTime);
+                table.AddRow(sale.Id, sale.Amount, sale.SaleItems.Count, sale.DateTime);
             }
 
             table.Write();
@@ -318,10 +337,10 @@ namespace MarketManagement.Services.Concrete
 
             var saleByPriceRange = marketService.ShowSalesByPriceRange(min, max);
 
-            var table = new ConsoleTable("Sale Id", "Price", "SaleItems Count", "DateTime");
+            var table = new ConsoleTable("Sale Id", "Amount", "SaleItems Count", "DateTime");
             foreach (var sale in saleByPriceRange)
             {
-                table.AddRow(sale.Id, sale.Price, sale.SaleItems.Count, sale.DateTime);
+                table.AddRow(sale.Id, sale.Amount, sale.SaleItems.Count, sale.DateTime);
             }
 
             table.Write();
@@ -330,14 +349,27 @@ namespace MarketManagement.Services.Concrete
         public static void MenuShowSaleByDate()
         {
             Console.WriteLine("Enter datetime:");
-            var date = DateTime.ParseExact(Console.ReadLine()!, "dd/MM/yyyy HH:mm:ss", null);
+
+            DateTime date;
+            string userInput = Console.ReadLine()!;
+
+            if (!string.IsNullOrEmpty(userInput))
+            {
+                date = DateTime.ParseExact(userInput, "dd/MM/yyyy HH:mm:ss", null);
+            }
+            else
+            {
+                date = DateTime.Now;
+            }
+
+            Console.WriteLine("Selected Date and Time: " + date);
 
             var saleByDate = marketService.ShowSaleByDate(date);
 
-            var table = new ConsoleTable("Sale Id", "Price", "SaleItems Count", "DateTime");
+            var table = new ConsoleTable("Sale Id", "Amount", "SaleItems Count", "DateTime");
             foreach (var sale in saleByDate)
             {
-                table.AddRow(sale.Id, sale.Price, sale.SaleItems.Count, sale.DateTime);
+                table.AddRow(sale.Id, sale.Amount, sale.SaleItems.Count, sale.DateTime);
             }
 
             table.Write();
@@ -345,18 +377,19 @@ namespace MarketManagement.Services.Concrete
 
         public static void MenuShowSaleItemsBySaleId()
         {
-            Console.WriteLine("Enter the sale id of the saleitem you want to show");
-            int saleId = int.Parse(Console.ReadLine()!);
-
-            var saleBySaleId = marketService.ShowSaleItemsBySaleId(saleId);
-            var productList = marketService.GetProducts();
-
-            Console.WriteLine("SaleItems by saleId");
-
-            var tableSaleItem = new ConsoleTable("Sale Id", "Product Name", "Product Price", "Quantity", "Total Price");
-            foreach (var sale in saleBySaleId)
+            try
             {
-                foreach (var item in sale.SaleItems)
+                Console.WriteLine("Enter the sale id of the saleitem you want to show");
+                int saleId = int.Parse(Console.ReadLine()!);
+
+                var saleBySaleId = marketService.ShowSaleItemsBySaleId(saleId);
+                var productList = marketService.GetProducts();
+
+                Console.WriteLine("SaleItems by saleId");
+
+                var tableSaleItem = new ConsoleTable("Sale Id", "Product Name", "Product Price", "Quantity", "Total Price");
+
+                foreach (var item in saleBySaleId.SaleItems)
                 {
                     var product = productList.FirstOrDefault(x => x.Id == item.ProductId);
                     if (product == null)
@@ -365,8 +398,11 @@ namespace MarketManagement.Services.Concrete
                     tableSaleItem.AddRow(item.SaleId, product.Name, product.Price, item.Quantity, item.TotalPrice);
                 }
 
+                tableSaleItem.Write();
+            }catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
             }
-            tableSaleItem.Write();
         }
     }
 }

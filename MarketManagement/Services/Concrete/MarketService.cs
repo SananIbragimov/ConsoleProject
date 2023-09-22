@@ -155,7 +155,7 @@ namespace MarketManagement.Services.Concrete
                 SaleItems = new List<SaleItem>()
             };
 
-            //decimal totalPrice = 0;
+            
             foreach (var item in saleItems)
             {
 
@@ -170,7 +170,6 @@ namespace MarketManagement.Services.Concrete
                     throw new Exception("Not enough quantity available for sale");
 
                 item.TotalPrice = product.Price * item.Quantity;
-                //totalPrice += item.TotalPrice;
 
                 var saleItem = new SaleItem()
                 {
@@ -179,6 +178,7 @@ namespace MarketManagement.Services.Concrete
                     Quantity = item.Quantity,
                     TotalPrice = item.TotalPrice
                 };
+
                 var existingSaleItem = sale.SaleItems.FirstOrDefault(x => x.ProductId == item.ProductId);
                 if (existingSaleItem != null)
                 {
@@ -230,7 +230,7 @@ namespace MarketManagement.Services.Concrete
                 saleItem.Quantity -= count;
                 product!.Quantity += count;
                 saleItem.TotalPrice -= product.Price * count;
-                sale.Price -= saleItem.TotalPrice;
+                sale.Amount -= saleItem.TotalPrice;
 
                 if (saleItem.Quantity == 0)
                 {
@@ -334,10 +334,13 @@ namespace MarketManagement.Services.Concrete
         // This method displays the sales by price range
         public List<Sale> ShowSalesByPriceRange(decimal min, decimal max)
         {
-            if (min > max || min <= 0 || max <= 0)
-                throw new Exception("Min or max range is not correct");
+            if (min > max)
+                throw new Exception("Min can't be larger than max");
 
-            var sales = _sales.Where(x => x.Price >= min && x.Price <= max).ToList();
+            if (min <= 0 || max <= 0)
+                throw new Exception("Min or max cannot be less than or equal to 0");
+
+            var sales = _sales.Where(x => x.Amount >= min && x.Amount <= max).ToList();
             if (sales is null)
                 throw new Exception("Sale List not found");
 
@@ -355,12 +358,12 @@ namespace MarketManagement.Services.Concrete
             return sales;
         }
 
-        public List<Sale> ShowSaleItemsBySaleId(int saleId)
+        public Sale ShowSaleItemsBySaleId(int saleId)
         {
             if (saleId <= 0)
                 throw new Exception("SaleId can't be less than 0!");
 
-            var equalSaleId = _sales.Where(x => x.Id == saleId).ToList();
+            var equalSaleId = _sales.FirstOrDefault(x => x.Id == saleId);
             if (equalSaleId is null)
                 throw new Exception($"Sale with SaleId = {saleId} is not available");
 
