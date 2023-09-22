@@ -9,7 +9,8 @@ namespace MarketManagement.Data.Enums
     public enum Category
     {
         drink = 1,
-        meat,
-        milk
+        food,
+        electronic,
+        cleaning
     }
 }

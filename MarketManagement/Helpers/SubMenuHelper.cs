@@ -15,18 +15,25 @@ namespace MarketManagement.Helpers
 
             do
             {
+                Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("1. Add Product");
                 Console.WriteLine("2. Update Product");
+                Console.ForegroundColor= ConsoleColor.Red;
                 Console.WriteLine("3. Delete Product");
+                Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("4. Show Products");
                 Console.WriteLine("5. Show Products By Category");
                 Console.WriteLine("6. Show Products By Price Range");
                 Console.WriteLine("7. Search Products By Name");
 
+                Console.ForegroundColor= ConsoleColor.DarkRed;
                 Console.WriteLine("0. Exit");
+                Console.ForegroundColor = ConsoleColor.DarkGray;
                 Console.WriteLine("----------------------------");
+                Console.ForegroundColor = ConsoleColor.Gray;
                 Console.WriteLine("Please, select an option:");
 
+               
                 while (!int.TryParse(Console.ReadLine(), out selectedOption))
                 {
                     Console.WriteLine("Please enter valid option:");
@@ -70,17 +77,23 @@ namespace MarketManagement.Helpers
 
             do
             {
+                Console.ForegroundColor = ConsoleColor.DarkGreen;
                 Console.WriteLine("1. Add Sale");
-                Console.WriteLine("2. Return Product From Sale");
+                Console.WriteLine("2. Return SaleItems From Sale");
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("3. Delete Sale");
+                Console.ForegroundColor = ConsoleColor.DarkGreen;
                 Console.WriteLine("4. Show Sales");
                 Console.WriteLine("5. Show Sales By Date Range");
                 Console.WriteLine("6. Show Sales By Price Range");
                 Console.WriteLine("7. Show Sale By Specific Date");
                 Console.WriteLine("8. Show SaleItems By SaleId");
 
+                Console.ForegroundColor = ConsoleColor.DarkRed;
                 Console.WriteLine("0. Exit");
+                Console.ForegroundColor = ConsoleColor.DarkGray;
                 Console.WriteLine("----------------------------");
+                Console.ForegroundColor = ConsoleColor.Gray;
                 Console.WriteLine("Please, select an option:");
 
                 while (!int.TryParse(Console.ReadLine(), out selectedOption))

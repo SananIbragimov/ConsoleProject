@@ -8,14 +8,18 @@ namespace MarketManagement
         {
             int selectedOption;
 
-            Console.WriteLine("Welcome to Store!");
+            Console.WriteLine("Welcome to Store!\n");
 
             do
             {
+                Console.ForegroundColor = ConsoleColor.DarkGreen;
                 Console.WriteLine("1. For managing products");
                 Console.WriteLine("2. For managing sales");
+                Console.ForegroundColor= ConsoleColor.DarkRed;
                 Console.WriteLine("0. Exit");
+                Console.ForegroundColor = ConsoleColor.DarkGray;
                 Console.WriteLine("----------------------------");
+                Console.ForegroundColor = ConsoleColor.Gray;
                 Console.WriteLine("Please, select an option:");
 
                 while (!int.TryParse(Console.ReadLine(), out selectedOption))

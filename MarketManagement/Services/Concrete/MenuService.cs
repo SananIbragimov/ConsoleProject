@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace MarketManagement.Services.Concrete
 {
-    public class MenuService
+    public class MenuService 
     {
         private static IMarket marketService = new MarketService();
 
@@ -23,14 +23,24 @@ namespace MarketManagement.Services.Concrete
                 Console.WriteLine("Enter Product name:");
                 string name = Console.ReadLine()!.ToLower();
 
-                Console.WriteLine("Enter Category name:");
-                Category category = Enum.Parse<Category>(Console.ReadLine()!.ToLower());
-
                 Console.WriteLine("Enter Product Price:");
                 decimal price = decimal.Parse(Console.ReadLine()!);
 
                 Console.WriteLine("Enter Product Quantity:");
                 int quantity = int.Parse(Console.ReadLine()!);
+
+                
+                Console.ResetColor();
+                Console.WriteLine("Enter Category name:");
+                var enumTable = new ConsoleTable("Category list:");
+                foreach (var value in Enum.GetValues(typeof(Category)))
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkCyan;
+                    enumTable.AddRow(value);
+                }
+                enumTable.Write();
+                Console.ResetColor();
+                Category category = Enum.Parse<Category>(Console.ReadLine()!.ToLower());
 
                 int id = marketService.AddProduct(name, category, price, quantity);
                 Console.WriteLine($"Product with ID:{id} was created!");
@@ -113,10 +123,11 @@ namespace MarketManagement.Services.Concrete
 
                 foreach (var value in Enum.GetValues(typeof(Category)))
                 {
+                    Console.ForegroundColor = ConsoleColor.DarkCyan;
                     enumTable.AddRow(value);
                 }
                 enumTable.Write();
-
+                Console.ResetColor();
                 Console.WriteLine("Choose the category:");
                 Category category = Enum.Parse<Category>(Console.ReadLine()!.ToLower());
 

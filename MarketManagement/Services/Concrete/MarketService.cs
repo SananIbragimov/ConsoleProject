@@ -27,10 +27,10 @@ namespace MarketManagement.Services.Concrete
                 throw new Exception("Category isn't exist");
 
             if (price <= 0)
-                throw new Exception("Price can't be less than 0!");
+                throw new Exception("Price can't be less than or equal to 0!");
 
             if (quantity <= 0)
-                throw new Exception("Quantity can't be less than 0!");
+                throw new Exception("Quantity can't be less than or equal to 0!");
 
             var existingProduct = _products.FirstOrDefault(x => x.Name == name && x.Category == category);
             if (existingProduct != null)
@@ -60,7 +60,7 @@ namespace MarketManagement.Services.Concrete
         public int UpdateProduct(int id, string name, Category category, decimal price, int quantity)
         {
             if (id <= 0)
-                throw new Exception("Id can't be less than 0!");
+                throw new Exception("Id can't be less than or equal to 0!");
 
             var existingProduct = _products.FirstOrDefault(x => x.Id == id);
             if (existingProduct == null)
@@ -78,7 +78,7 @@ namespace MarketManagement.Services.Concrete
         public bool DeleteProduct(int id)
         {
             if (id <= 0)
-                throw new Exception("Id can't be less than 0!");
+                throw new Exception("Id can't be less than or equal to 0!");
 
             var deleteProduct = _products.FirstOrDefault(x => x.Id == id);
             if (deleteProduct == null)
@@ -142,6 +142,7 @@ namespace MarketManagement.Services.Concrete
         }
 
         // This method adds sales to the _sales list
+        private int _saleId = 1;
         public int AddSale(List<SaleItem> saleItems, DateTime dateTime)
         {
 
@@ -151,6 +152,7 @@ namespace MarketManagement.Services.Concrete
 
             var sale = new Sale()
             {
+                Id = _saleId,
                 DateTime = dateTime,
                 SaleItems = new List<SaleItem>()
             };
@@ -195,14 +197,13 @@ namespace MarketManagement.Services.Concrete
             }
 
             _sales.Add(sale);
-
+            _saleId++;
             return sale.SaleItems.Count;
         }
 
         // This method refund the product from sale
         public void ReturnProductFromSale()
         {
-
 
             while (true)
             {
@@ -266,6 +267,7 @@ namespace MarketManagement.Services.Concrete
 
 
                 }
+
                 Console.Write("Do you want to delete another item? (yes/no): ");
                 var response = Console.ReadLine()!.Trim().ToLower();
                 if (response == "no")
