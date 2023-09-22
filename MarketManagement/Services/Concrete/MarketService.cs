@@ -155,7 +155,7 @@ namespace MarketManagement.Services.Concrete
                 SaleItems = new List<SaleItem>()
             };
 
-            
+
             foreach (var item in saleItems)
             {
 
@@ -200,87 +200,84 @@ namespace MarketManagement.Services.Concrete
         }
 
         // This method refund the product from sale
-        public int ReturnProductFromSale(int saleId, int productId, int count)
+        public void ReturnProductFromSale()
         {
-            if (saleId <= 0)
-                throw new Exception("saleId can't be less than 0!");
 
-            if (productId <= 0)
-                throw new Exception("productId can't be less than 0!");
 
-            if (count <= 0)
-                throw new Exception("Count can't be less than 0!");
-
-            var sale = _sales.FirstOrDefault(x => x.Id == saleId);
-            if (sale == null)
-                throw new Exception($"Sale with Id {saleId} not found!");
-
-            var saleItem = sale.SaleItems.FirstOrDefault(x => x.ProductId == productId);
-            if (saleItem == null)
-                throw new Exception($"SaleItem with Id {productId} not found!");
-
-            var product = _products.FirstOrDefault(x => x.Id == saleItem.ProductId);
-
-            if (saleItem.Quantity < count)
-                throw new Exception($"Maximum {saleItem.Quantity} items can be removed from the product");
-
-            if (saleItem.Quantity > 0)
+            while (true)
             {
 
-                saleItem.Quantity -= count;
-                product!.Quantity += count;
-                saleItem.TotalPrice -= product.Price * count;
-                sale.Amount -= saleItem.TotalPrice;
-
-                if (saleItem.Quantity == 0)
+                Console.WriteLine("Enter saleId: ");
+                if (!int.TryParse(Console.ReadLine(), out int nextSaleId))
                 {
-                    sale.SaleItems.Remove(saleItem);
+                    Console.WriteLine("Invalid saleId. Please enter a valid number.");
+                    continue;
                 }
 
-                while (true)
+                Console.WriteLine("Enter productId: ");
+                if (!int.TryParse(Console.ReadLine(), out int nextProductId))
                 {
-                    Console.Write("Do you want to delete another item? (yes/no): ");
-                    var response = Console.ReadLine()!.Trim().ToLower();
+                    Console.WriteLine("Invalid productId. Please enter a valid number.");
+                    continue;
+                }
 
-                    if (response == "yes")
+                Console.WriteLine("Enter count: ");
+                if (!int.TryParse(Console.ReadLine(), out int nextCount) || nextCount <= 0)
+                {
+                    Console.WriteLine("Invalid count. Please enter a positive number.");
+                    continue;
+                }
+
+
+                if (nextSaleId <= 0)
+                    throw new Exception("saleId can't be less than 0!");
+
+                if (nextProductId <= 0)
+                    throw new Exception("productId can't be less than 0!");
+
+                if (nextCount <= 0)
+                    throw new Exception("Count can't be less than 0!");
+
+                var sale = _sales.FirstOrDefault(x => x.Id == nextSaleId);
+                if (sale == null)
+                    throw new Exception($"Sale with Id {nextSaleId} not found!");
+
+                var saleItem = sale.SaleItems.FirstOrDefault(x => x.ProductId == nextProductId);
+                if (saleItem == null)
+                    throw new Exception($"SaleItem with Id {nextProductId} not found!");
+
+                var product = _products.FirstOrDefault(x => x.Id == saleItem.ProductId);
+
+                if (saleItem.Quantity < nextCount)
+                    throw new Exception($"Maximum {saleItem.Quantity} items can be removed from the product");
+
+                if (saleItem.Quantity > 0)
+                {
+
+                    saleItem.Quantity -= nextCount;
+                    product!.Quantity += nextCount;
+                    saleItem.TotalPrice -= product.Price * nextCount;
+                    sale.Amount -= saleItem.TotalPrice;
+
+                    if (saleItem.Quantity == 0)
                     {
-                        Console.WriteLine("Enter saleId: ");
-                        if (!int.TryParse(Console.ReadLine(), out int nextSaleId))
-                        {
-                            Console.WriteLine("Invalid saleId. Please enter a valid number.");
-                            continue;
-                        }
-
-                        Console.WriteLine("Enter productId: ");
-                        if (!int.TryParse(Console.ReadLine(), out int nextProductId))
-                        {
-                            Console.WriteLine("Invalid productId. Please enter a valid number.");
-                            continue;
-                        }
-
-                        Console.WriteLine("Enter count: ");
-                        if (!int.TryParse(Console.ReadLine(), out int nextCount) || nextCount <= 0)
-                        {
-                            Console.WriteLine("Invalid count. Please enter a positive number.");
-                            continue;
-                        }
-
-                        ReturnProductFromSale(nextSaleId, nextProductId, nextCount);
+                        sale.SaleItems.Remove(saleItem);
                     }
-                    else if (response == "no")
-                    {
-                        return productId;
-                    }
-                    else
-                    {
-                        Console.WriteLine("Invalid input. Please enter 'yes' or 'no':");
-                        continue;
 
-                    }
+
+                }
+                Console.Write("Do you want to delete another item? (yes/no): ");
+                var response = Console.ReadLine()!.Trim().ToLower();
+                if (response == "no")
+                {
+                    break;
+                }
+                else if (response != "yes")
+                {
+                    Console.WriteLine("Invalid response. Please enter 'yes' or 'no'.");
+                    continue;
                 }
             }
-            return productId;
-            
         }
 
         // This method completely deletes the sale
@@ -299,7 +296,7 @@ namespace MarketManagement.Services.Concrete
             {
                 var confirm = Console.ReadLine()!.Trim().ToLower();
 
-                if(confirm == "yes")
+                if (confirm == "yes")
                 {
                     foreach (var item in sale.SaleItems)
                     {
@@ -315,7 +312,7 @@ namespace MarketManagement.Services.Concrete
                     _sales.Remove(sale);
                     return true;
                 }
-                else if(confirm == "no")
+                else if (confirm == "no")
                 {
                     return false;
                 }

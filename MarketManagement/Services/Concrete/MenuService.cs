@@ -258,17 +258,8 @@ namespace MarketManagement.Services.Concrete
         {
             try
             {
-                Console.WriteLine("Enter SaleId:");
-                int saleId = int.Parse(Console.ReadLine()!);
-
-                Console.WriteLine("Enter ProductId:");
-                int productId = int.Parse(Console.ReadLine()!);
-
-                Console.WriteLine("Enter Quantity:");
-                int count = int.Parse(Console.ReadLine()!);
-
-                var returnProduct = marketService.ReturnProductFromSale(saleId, productId, count);
-                Console.WriteLine($"Return the Product with ProductId = {returnProduct}");
+                marketService.ReturnProductFromSale();
+                Console.WriteLine($"Return the SaleItem from Sale");
             }
             catch (Exception ex)
             {
@@ -292,7 +283,8 @@ namespace MarketManagement.Services.Concrete
                 {
                     Console.WriteLine("Sale not deleted");
                 }
-            }catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
@@ -412,7 +404,8 @@ namespace MarketManagement.Services.Concrete
                 }
 
                 tableSaleItem.Write();
-            }catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }

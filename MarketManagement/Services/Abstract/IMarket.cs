@@ -21,7 +21,7 @@ namespace MarketManagement.Services.Abstract
 
         // Interface methods for sales
         public int AddSale(List<SaleItem> saleItems, DateTime dateTime);
-        public int ReturnProductFromSale(int saleId, int productId, int count);
+        public void ReturnProductFromSale();
         public bool DeleteSale(int saleId);
         public List<Sale> GetSales();
         public List<Sale> ShowSalesByDateRange(DateTime startDate, DateTime endDate);
