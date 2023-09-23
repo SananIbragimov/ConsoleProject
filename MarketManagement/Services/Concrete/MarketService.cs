@@ -298,6 +298,7 @@ namespace MarketManagement.Services.Concrete
         // This method completely deletes the sale
         public bool DeleteSale(int saleId)
         {
+
             if (saleId <= 0)
                 throw new Exception("SaleId can't be less than 0!");
 
@@ -349,6 +350,7 @@ namespace MarketManagement.Services.Concrete
         // This method displays the sales by date range
         public List<Sale> ShowSalesByDateRange(DateTime startDate, DateTime endDate)
         {
+
             if (startDate > endDate)
                 throw new Exception("StartDate can't be larger than EndDate");
 
@@ -358,11 +360,13 @@ namespace MarketManagement.Services.Concrete
                 throw new Exception("Sale List not found");
 
             return sales;
+
         }
 
         // This method displays the sales by price range
         public List<Sale> ShowSalesByPriceRange(decimal min, decimal max)
         {
+
             if (min > max)
                 throw new Exception("Min can't be larger than max");
 
@@ -380,24 +384,28 @@ namespace MarketManagement.Services.Concrete
         // This method displays the sales according to a specific date
         public List<Sale> ShowSaleByDate(DateTime date)
         {
+
             var sales = _sales
-        .Where(x =>
+         .Where(x =>
             x.DateTime.Year == date.Year &&
             x.DateTime.Month == date.Month &&
             x.DateTime.Day == date.Day &&
             x.DateTime.Hour == date.Hour &&
             x.DateTime.Minute == date.Minute &&
             x.DateTime.Second == date.Second)
-        .ToList();
+         .ToList();
 
             if (sales.Count == 0)
                 throw new Exception("No sales found for the specified date.");
 
             return sales;
+
         }
 
+        // This method displays the SaleItems by SaleId
         public Sale ShowSaleItemsBySaleId(int saleId)
         {
+
             if (saleId <= 0)
                 throw new Exception("SaleId can't be less than 0!");
 

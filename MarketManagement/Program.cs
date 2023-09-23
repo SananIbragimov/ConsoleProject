@@ -15,7 +15,7 @@ namespace MarketManagement
                 Console.ForegroundColor = ConsoleColor.DarkGreen;
                 Console.WriteLine("1. For managing products");
                 Console.WriteLine("2. For managing sales");
-                Console.ForegroundColor= ConsoleColor.DarkRed;
+                Console.ForegroundColor = ConsoleColor.DarkRed;
                 Console.WriteLine("0. Exit");
                 Console.ForegroundColor = ConsoleColor.DarkGray;
                 Console.WriteLine("----------------------------");

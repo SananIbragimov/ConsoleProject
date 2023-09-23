@@ -15,7 +15,6 @@ namespace MarketManagement.Data.Models
             Id = id;
             id++;
         }
-
         public decimal Amount { get; set; }
         public List<SaleItem> SaleItems { get; set; }
         public DateTime DateTime { get; set; }

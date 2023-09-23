@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MarketManagement.Data.Models
 {
-    public class Product : BaseModel,ICloneable
+    public class Product : BaseModel, ICloneable
     {
         private static int id = 1;
         public Product()
@@ -32,7 +32,6 @@ namespace MarketManagement.Data.Models
                 Quantity = this.Quantity
             };
         }
-
 
     }
 

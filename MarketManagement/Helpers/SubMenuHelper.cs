@@ -18,7 +18,7 @@ namespace MarketManagement.Helpers
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("1. Add Product");
                 Console.WriteLine("2. Update Product");
-                Console.ForegroundColor= ConsoleColor.Red;
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("3. Delete Product");
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("4. Show Products");
@@ -26,14 +26,14 @@ namespace MarketManagement.Helpers
                 Console.WriteLine("6. Show Products By Price Range");
                 Console.WriteLine("7. Search Products By Name");
 
-                Console.ForegroundColor= ConsoleColor.DarkRed;
+                Console.ForegroundColor = ConsoleColor.DarkRed;
                 Console.WriteLine("0. Exit");
                 Console.ForegroundColor = ConsoleColor.DarkGray;
                 Console.WriteLine("----------------------------");
                 Console.ForegroundColor = ConsoleColor.Gray;
                 Console.WriteLine("Please, select an option:");
 
-               
+
                 while (!int.TryParse(Console.ReadLine(), out selectedOption))
                 {
                     Console.WriteLine("Please enter valid option:");
