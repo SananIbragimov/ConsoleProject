@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MarketManagement.Data.Models
 {
-    public class Product : BaseModel
+    public class Product : BaseModel,ICloneable
     {
         private static int id = 1;
         public Product()
@@ -20,5 +20,20 @@ namespace MarketManagement.Data.Models
         public Category Category { get; set; }
         public decimal Price { get; set; }
         public int Quantity { get; set; }
+
+        public object Clone()
+        {
+            return new Product
+            {
+                Id = this.Id,
+                Name = this.Name,
+                Category = this.Category,
+                Price = this.Price,
+                Quantity = this.Quantity
+            };
+        }
+
+
     }
+
 }
